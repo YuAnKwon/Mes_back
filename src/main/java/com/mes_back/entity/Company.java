@@ -3,15 +3,16 @@ package com.mes_back.entity;
 import com.mes_back.constant.CompanyType;
 import com.mes_back.constant.Yn;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "company")
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Company extends BaseTimeEntity {
     @Id
     @Column(name = "company_id")
@@ -20,27 +21,36 @@ public class Company extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private CompanyType company_type;
+    private CompanyType companyType;
 
     @Column(nullable = false)
-    private String company_name;
+    private String companyName;
 
     @Column(nullable = false)
-    private String ceo_name;
+    private String ceoName;
 
     @Column(nullable = false)
-    private String ceo_phone;
-    private String business_num;
+    private String ceoPhone;
+
+    @Column(nullable = false)
+    private String businessNum;
+
+    @Column(nullable = false)
     private String zipcode;
-    private String address_base;
-    private String address_detail;
+
+    @Column(nullable = false)
+    private String addressBase;
+
+    @Column(nullable = false)
+    private String addressDetail;
+
     private String remark;
-    private String manager_name;
-    private String manager_phone;
-    private String manager_email;
+    private String managerName;
+    private String managerPhone;
+    private String managerEmail;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Yn business_yn;
+    private Yn businessYn = Yn.Y;
 
 }

@@ -27,17 +27,17 @@ public class MaterialOut extends BaseTimeEntity{
     @JoinColumn(name = "material_in_id")
     private MaterialIn materialIn; // 어떤 입고건에서 출고되었는지
 
-    @Column(name = "out_amount")
+    @Column(name = "out_amount", nullable = false)
     private Integer outAmount;
 
     @Column(name = "out_num", unique = true)
     private String outNum;
 
-    @Column(name = "out_date")
+    @Column(name = "out_date", nullable = false)
     private LocalDate outDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "del_yn", length = 1)
+    @Column(name = "del_yn", length = 1, nullable = false)
     private Yn delYn = Yn.N;
 
 }

@@ -24,20 +24,20 @@ public class MaterialIn extends BaseTimeEntity{
     @JoinColumn(name = "material_id")
     private Material material; // 원자재 품목 (별도 테이블 존재 가정)
 
-    @Column(name = "manufacture_date")
+    @Column(name = "manufacture_date", nullable = false)
     private LocalDate manufactureDate;
 
-    @Column(name = "in_amount")
+    @Column(name = "in_amount", nullable = false)
     private Integer inAmount;
 
     @Column(name = "in_num", unique = true)
     private String inNum;
 
-    @Column(name = "in_date")
+    @Column(name = "in_date", nullable = false)
     private String inDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "del_yn")
+    @Column(name = "del_yn", nullable = false)
     private Yn delYn = Yn.N;
 
 }

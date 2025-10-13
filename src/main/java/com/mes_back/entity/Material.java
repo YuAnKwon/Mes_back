@@ -34,16 +34,16 @@ public class Material extends BaseTimeEntity{
     @Column(name = "type", nullable = false)
     private MaterialType type;  // 분류 (ENUM)
 
-    @Column(name = "color")
+    @Column(name = "color", nullable = false)
     private String color;  // 색상
 
-    @Column(name = "spec")
+    @Column(name = "spec", nullable = false)
     private Integer spec;  // 규격
 
-    @Column(name = "scale")
+    @Column(name = "scale", nullable = false)
     private String scale;  // 규격 단위
 
-    @Column(name = "manufacturer")
+    @Column(name = "manufacturer", nullable = false)
     private String manufacturer;  // 제조사
 
     @Column(name = "remark", columnDefinition = "TEXT")

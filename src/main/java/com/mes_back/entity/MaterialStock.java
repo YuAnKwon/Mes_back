@@ -22,7 +22,7 @@ public class MaterialStock extends BaseTimeEntity{
     @JoinColumn(name = "material_id")
     private Material material;
 
-    @Column(name = "stock")
+    @Column(name = "stock", nullable = false)
     private Integer stock;
 
 }
