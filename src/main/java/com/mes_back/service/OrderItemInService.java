@@ -1,5 +1,6 @@
 package com.mes_back.service;
 
+import com.mes_back.constant.EnumKoreanMapper;
 import com.mes_back.constant.Yn;
 import com.mes_back.dto.OrderItemInDto;
 import com.mes_back.entity.OrderItem;
@@ -20,15 +21,19 @@ public class OrderItemInService {
         // 사용여부가 Y인것만 찾기
         List<OrderItem> ItemList = orderItemRepository.findByUseYn(Yn.Y);
 
-        List<OrderItemInDto> ItemDtoList = new ArrayList<>();
-        return ItemDtoList;
-//        for(OrderItem item : ItemList){
-//            OrderItemInDto itemInDto = OrderItem.builder()
-//                    .id(item.getId())
-//                    .itemName(item.getItemName())
-//                    .itemCode(item.getItemCode())
-//                    .company(item.getCompany().getCompanyName())
-//                    .build();
-//        }
+        List<OrderItemInDto> itemDtoList = new ArrayList<>();
+        for(OrderItem item : ItemList){
+            OrderItemInDto itemInDto = OrderItemInDto.builder()
+                    .id(item.getId())
+                    .itemName(item.getItemName())
+                    .itemCode(item.getItemCode())
+                    .company(item.getCompany().getCompanyName())
+                    .type(EnumKoreanMapper.getOrderItemTypeKorean(item.getType().name())) // 한글 변환
+                    .remark(item.getRemark())
+                    .build();
+
+            itemDtoList.add(itemInDto);
+        }
+        return itemDtoList;
     }
 }

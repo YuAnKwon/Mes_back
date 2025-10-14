@@ -1,9 +1,6 @@
 package com.mes_back.dto;
 
-import com.mes_back.constant.OrderItemType;
-import com.mes_back.entity.Company;
 import lombok.*;
-import org.modelmapper.ModelMapper;
 
 @Getter
 @Setter
@@ -20,10 +17,7 @@ public class OrderItemInDto {
 
     private String company; // 거래처명
 
-    private OrderItemType type; // 분류
+    private String type; // 분류
 
     private String remark; // 비고
-
-    //private static ModelMapper modelMapper = new ModelMapper();
-
 }
