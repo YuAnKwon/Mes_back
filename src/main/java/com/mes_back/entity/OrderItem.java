@@ -27,29 +27,29 @@ public class OrderItem extends BaseTimeEntity {
     private Company company;
 
     @Column(nullable = false)
-    private String itemName;
+    private String itemName; // 품목명
 
     @Column(nullable = false)
-    private String itemCode;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OrderItemType type;
-
-    @Column(nullable = false)
-    private Integer unitPrice;
-
-    @Column(nullable = false)
-    private String color;
+    private String itemCode; // 품목코드
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private CoatingMethod coatingMethod;
+    private OrderItemType type; // 분류
+
+    @Column(nullable = false)
+    private Integer unitPrice; // 품목단가
+
+    @Column(nullable = false)
+    private String color; // 색상
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CoatingMethod coatingMethod; // 도장방식
 
     @Column(columnDefinition = "TEXT")
-    private String remark;
+    private String remark; // 비고
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Yn useYn = Yn.Y;
+    private Yn useYn = Yn.Y; // 사용여부
 }
