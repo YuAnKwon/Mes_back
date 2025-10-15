@@ -1,18 +1,25 @@
 package com.mes_back.service;
 
+import com.mes_back.constant.Yn;
 import com.mes_back.dto.MaterialDto;
+import com.mes_back.dto.MaterialInDto;
+import com.mes_back.entity.Material;
+import com.mes_back.entity.MaterialIn;
+import com.mes_back.repository.MaterialInRepository;
 import com.mes_back.repository.MaterialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MaterialInService {
     private final MaterialRepository materialRepository;
+    private final MaterialInRepository materialInRepository;
 
     public List<MaterialDto> findAll() {
         return materialRepository.findAll().stream()
@@ -23,9 +30,53 @@ public class MaterialInService {
                         .companyName(material.getCompany().getCompanyName())
                         .spec(material.getSpec())
                         .scale(material.getScale())
+                        .specAndScale(material.getSpec()+material.getScale())
                         .manufacturer(material.getManufacturer())
+
                         .remark(material.getRemark())
                         .build())
                 .toList();
+    }
+
+    // 전체 조회 (삭제 안된것들)
+    public List<MaterialInDto> findAllActive() {
+        return materialInRepository.findByDelYn(Yn.N).stream()
+                .map(in -> {
+                    Material m = in.getMaterial();
+                    if (m == null) return null; // 혹시 null일 경우 방어
+
+                    Integer spec = m.getSpec() != null ? m.getSpec() : 0;
+                    String scale = m.getScale() != null ? m.getScale() : "";
+
+                    int totalStock = (in.getInAmount() != null ? in.getInAmount() : 0) * spec;
+
+                    return MaterialInDto.builder()
+                            .id(in.getId())
+                            .materialName(m.getName())
+                            .materialCode(m.getCode())
+                            .companyName(m.getCompany() != null ? m.getCompany().getCompanyName() : "")
+                            .inAmount(in.getInAmount())
+                            .spec(spec)
+                            .scale(scale)
+                            .specAndScale(spec + scale)
+                            .manufacturer(m.getManufacturer())
+                            .inNum(in.getInNum())
+                            .inDate(in.getInDate())
+                            .manufactureDate(in.getManufactureDate())
+                            .delYn(in.getDelYn() != null ? in.getDelYn().name() : "N")
+                            .stock(totalStock)
+                            .build();
+                })
+                .filter(Objects::nonNull) // null 방어 후 필터링
+                .toList();
+    }
+
+
+    //삭제
+    public void softDelete(Long id) {
+        MaterialIn materialIn = materialInRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("입고 데이터를 찾을 수 없습니다."));
+        materialIn.setDelYn(Yn.Y);
+        materialInRepository.save(materialIn);
     }
 }
