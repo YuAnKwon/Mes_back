@@ -14,6 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -81,19 +82,21 @@ public class DummyDataLoader implements CommandLineRunner {
             orderItemRepository.save(item);
         });
 
-        // 원자재 입고 더미
-//        Material material = materialRepository.findById(1L)
-//                .orElseThrow(() -> new RuntimeException("Material not found"));
-//
-//        MaterialIn materialIn = MaterialIn.builder()
-//                .material(material)
-//                .manufactureDate(LocalDate.of(2025, 10, 10))  // 제조일자
-//                .inAmount(500)                               // 입고수량
-//                .inNum("IN-20251010-001")                    // 입고번호
-//                .inDate("2025-10-10")                        // 입고일자
-//                .delYn(Yn.N)                                 // 삭제 여부
-//                .build();
-//        materialInRepository.save(materialIn);
+        if (materialInRepository.count() == 0) {
+            Material material = materialRepository.findById(1L)
+                    .orElseThrow(() -> new RuntimeException("Material not found"));
+
+            MaterialIn materialIn = MaterialIn.builder()
+                    .material(material)
+                    .manufactureDate(new Date())
+                    .inAmount(500)
+                    .inNum("IN-20251010-001")
+                    .inDate(new Date())
+                    .delYn(Yn.N)
+                    .build();
+
+            materialInRepository.save(materialIn);
+        }
 
         System.out.println("더미 Company 10개 + OrderItem 100개 삽입 완료!");
     }

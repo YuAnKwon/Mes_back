@@ -5,6 +5,7 @@ import com.mes_back.constant.Yn;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "Material_in")
@@ -25,7 +26,7 @@ public class MaterialIn extends BaseTimeEntity{
     private Material material; // 원자재 품목 (별도 테이블 존재 가정)
 
     @Column(name = "manufacture_date", nullable = false)
-    private LocalDate manufactureDate;
+    private Date manufactureDate;
 
     @Column(name = "in_amount", nullable = false)
     private Integer inAmount;
@@ -33,8 +34,8 @@ public class MaterialIn extends BaseTimeEntity{
     @Column(name = "in_num", unique = true)
     private String inNum;
 
-    @Column(name = "in_date", nullable = false)
-    private String inDate;
+    @Column(name = "in_date", nullable = false, length = 0)
+    private Date inDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "del_yn", nullable = false)

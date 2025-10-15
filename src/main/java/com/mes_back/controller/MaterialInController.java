@@ -18,4 +18,9 @@ public class MaterialInController {
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(materialInService.findAll());
     }
+
+    @GetMapping("/in")
+    public ResponseEntity<?> findAllActive() {
+        return ResponseEntity.ok(materialInService.findAllActive());
+    }
 }
