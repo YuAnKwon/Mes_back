@@ -35,7 +35,7 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    //업체 조회
+    //업체 조회(Entity -> Dto)
     public List<CompanyListDto> findAll() {
         return companyRepository.findAll().stream()
                 .map(CompanyListDto::new)

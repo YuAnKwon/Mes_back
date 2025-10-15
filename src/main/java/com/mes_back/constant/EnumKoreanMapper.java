@@ -29,5 +29,13 @@ public class EnumKoreanMapper {
             default: return "기타";
         }
     }
+
+    public static String getCompanyTypeKorean(String type) {
+        switch (CompanyType.valueOf(type)) {
+            case CLIENT: return "거래처";
+            case SUPPLIER: return "매입처";
+            default: return "기타";
+        }
+    }
 }
 
