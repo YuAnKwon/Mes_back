@@ -47,27 +47,27 @@ public class DummyDataLoader implements CommandLineRunner {
 
         companyRepository.saveAll(companies);
 
-
-
-        // 2️⃣ OrderItem 더미 생성
-        OrderItemType[] types = OrderItemType.values();
-        CoatingMethod[] coatings = CoatingMethod.values();
-
-        IntStream.rangeClosed(1, 100).forEach(i -> {
-            OrderItem item = OrderItem.builder()
-                    .company(companies.get(i % companies.size()))
-                    .itemName("품목" + i)
-                    .itemCode(String.valueOf(100 + i))
-                    .type(types[i % types.length])       // ⚡ Enum 그대로 저장
-                    .unitPrice(1000 + i * 10)
-                    .color("색상" + ((i % 5) + 1))
-                    .coatingMethod(coatings[i % coatings.length])
-                    .remark("비고 " + i + "123123")
-                    .useYn(Yn.Y)
-                    .build();
-
-            orderItemRepository.save(item);
-        });
+//
+//
+//        // 2️⃣ OrderItem 더미 생성
+//        OrderItemType[] types = OrderItemType.values();
+//        CoatingMethod[] coatings = CoatingMethod.values();
+//
+//        IntStream.rangeClosed(1, 100).forEach(i -> {
+//            OrderItem item = OrderItem.builder()
+//                    .company(companies.get(i % companies.size()))
+//                    .itemName("품목" + i)
+//                    .itemCode(String.valueOf(100 + i))
+//                    .type(types[i % types.length])       // ⚡ Enum 그대로 저장
+//                    .unitPrice(1000 + i * 10)
+//                    .color("색상" + ((i % 5) + 1))
+//                    .coatingMethod(coatings[i % coatings.length])
+//                    .remark("비고 " + i + "123123")
+//                    .useYn(Yn.Y)
+//                    .build();
+//
+//            orderItemRepository.save(item);
+//        });
 
         // Material 더미
         List<Material> materials = List.of(

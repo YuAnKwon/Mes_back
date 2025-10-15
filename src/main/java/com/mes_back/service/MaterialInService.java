@@ -3,11 +3,9 @@ package com.mes_back.service;
 import com.mes_back.constant.Yn;
 import com.mes_back.dto.MaterialDto;
 import com.mes_back.dto.MaterialInDto;
-import com.mes_back.dto.OrderItemInDto;
 import com.mes_back.entity.Material;
 import com.mes_back.entity.MaterialIn;
-import com.mes_back.entity.OrderItem;
-import com.mes_back.entity.OrderItemInout;
+
 import com.mes_back.repository.MaterialInRepository;
 import com.mes_back.repository.MaterialRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
