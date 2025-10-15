@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface MaterialInRepository extends JpaRepository<MaterialIn,Long> {
     List<MaterialIn> findByDelYn(Yn delYn);
+    long countByInNumStartingWith(String prefix);
 }
