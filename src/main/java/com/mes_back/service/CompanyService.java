@@ -1,5 +1,6 @@
 package com.mes_back.service;
 
+import com.mes_back.constant.Yn;
 import com.mes_back.dto.CompanyDto;
 import com.mes_back.dto.CompanyListDto;
 import com.mes_back.entity.Company;
@@ -41,6 +42,16 @@ public class CompanyService {
                 .map(CompanyListDto::new)
                 .collect(Collectors.toList());
     }
+
+    //업체 거래상태 변경
+    public Company updateBusinessYn(Long id, Yn updatedYn) {
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 업체가 존재하지 않습니다."));
+        company.setBusinessYn(updatedYn);
+        return companyRepository.save(company);
+    }
+
+
 
 
 }

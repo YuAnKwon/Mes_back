@@ -1,7 +1,9 @@
 package com.mes_back.controller;
 
+import com.mes_back.constant.Yn;
 import com.mes_back.dto.CompanyDto;
 import com.mes_back.dto.CompanyListDto;
+import com.mes_back.dto.CompanyStateDto;
 import com.mes_back.entity.Company;
 import com.mes_back.repository.CompanyRepository;
 import com.mes_back.service.CompanyService;
@@ -32,5 +34,13 @@ public class CampanyController {
         return ResponseEntity.ok(companyService.findAll());
     }
 
+    //업체 거래 상태 변경
+    @PatchMapping("/{id}/state")
+    public ResponseEntity<Company> updateBusinessYn( @PathVariable Long id, @RequestBody CompanyStateDto companyStateDto ) {
+        Yn yn = Yn.valueOf(companyStateDto.getUpdatedState()); // "Y" 또는 "N" 객체
+        Company updatedCompany = companyService.updateBusinessYn(id, yn);
+        return ResponseEntity.ok(updatedCompany); // ← 반환값 사용
+
+    }
 
 }
