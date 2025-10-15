@@ -2,6 +2,8 @@ package com.mes_back.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -11,6 +13,9 @@ import lombok.*;
 public class OrderItemInDto {
 
     private Long id;
+
+    private String lotNum; // lot번호
+
     private String itemName; // 품목명
 
     private String itemCode; // 품목코드
@@ -20,4 +25,9 @@ public class OrderItemInDto {
     private String type; // 분류
 
     private String remark; // 비고
+
+    private Integer inAmount; // 수량
+
+    private String inDate; // 입고일자
+
 }

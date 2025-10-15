@@ -29,13 +29,11 @@ public class OrderItemInout extends BaseTimeEntity {
     private Integer inAmount;
 
     @Column(nullable = false, unique = true)
-    private String LotNum;
+    private String lotNum;
 
     @Column(nullable = false)
     private Date inDate;
 
-    @Column(columnDefinition = "TEXT")
-    private String inRemark;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
