@@ -18,7 +18,7 @@ public class OrderItemInout extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_item_in_id")
+    @Column(name = "order_item_inout_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,7 +34,6 @@ public class OrderItemInout extends BaseTimeEntity {
     @Column(nullable = false)
     private Date inDate;
 
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Yn inDelYn = Yn.N;
@@ -45,9 +44,6 @@ public class OrderItemInout extends BaseTimeEntity {
     private String outNum;
 
     private Date outDate;
-
-    @Column(columnDefinition = "TEXT")
-    private String outRemark;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
