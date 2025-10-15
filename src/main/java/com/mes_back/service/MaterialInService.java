@@ -81,7 +81,7 @@ public class MaterialInService {
         MaterialIn materialIn = materialInRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("입고 데이터를 찾을 수 없습니다."));
         materialIn.setDelYn(Yn.Y);
-        materialInRepository.save(materialIn);
+
     }
 
     public void registerIn(List<MaterialInDto> materialInDtos) {
