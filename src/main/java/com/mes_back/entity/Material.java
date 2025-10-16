@@ -52,5 +52,5 @@ public class Material extends BaseTimeEntity{
 
     @Enumerated(EnumType.STRING)
     @Column(name = "use_yn", nullable = false)
-    private Yn useYn;  // 사용여부 (Y/N)
+    private Yn useYn = Yn.Y;  // 사용여부 (Y/N) //초기값 추가
 }
