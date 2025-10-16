@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,35 +31,25 @@ public class MaterialOutService {
     private final MaterialStockRepository materialStockRepository;
     private final MaterialOutRepository materialOutRepository;
 
-    public List<MaterialDto> findAllOutRegister() {
-        List<MaterialIn> inList = materialInRepository.findByDelYn(Yn.N);
-
-        // 품목별로 그룹핑
-        Map<Material, List<MaterialIn>> grouped = inList.stream()
+    public List<MaterialInDto> findAllOutRegister() {
+        return materialInRepository.findByDelYn(Yn.N).stream()
                 .filter(in -> in.getMaterial() != null)
-                .collect(Collectors.groupingBy(MaterialIn::getMaterial));
-
-        // DTO로 변환
-        return grouped.entrySet().stream()
-                .map(entry -> {
-                    Material material = entry.getKey();
-                    if (material == null) return null;
-
-                    int stock = materialStockRepository.findByMaterial(material)
-                            .map(MaterialStock::getStock)
-                            .orElse(0);
-
-                    return MaterialDto.builder()
-                            .id(material.getId())
-                            .materialName(material.getName())
-                            .materialCode(material.getCode())
-                            .companyName(material.getCompany() != null ? material.getCompany().getCompanyName() : "")
-                            .manufacturer(material.getManufacturer())
-                            .scale(material.getScale())
-                            .spec(material.getSpec())
-                            .specAndScale(material.getSpec() + material.getScale())
-
-                            .stock(stock)
+                .map(in -> {
+                    Material m = in.getMaterial();
+                    return MaterialInDto.builder()
+                            .id(in.getId())
+                            .inNum(in.getInNum()) // ✅ LOT(입고번호)
+                            .materialCode(m.getCode())
+                            .materialName(m.getName())
+                            .companyName(m.getCompany() != null ? m.getCompany().getCompanyName() : "")
+                            .manufacturer(m.getManufacturer())
+                            .spec(m.getSpec())
+                            .scale(m.getScale())
+                            .specAndScale(m.getSpec() + m.getScale())
+                            .inAmount(in.getInAmount())
+                            .stock(in.getStock()) // ✅ 남은 재고
+                            .inDate(in.getInDate())
+                            .manufactureDate(in.getManufactureDate())
                             .build();
                 })
                 .toList();
@@ -102,12 +93,12 @@ public class MaterialOutService {
             } else {
                 // DB에서 오늘 날짜로 시작하는 출고번호 개수 확인
                 count = materialOutRepository.countByOutNumStartingWith(
-                        "OUT-" + outDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+                        "MOUT-" + outDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
                 );
             }
 
             // 6️⃣ LOT 번호 생성
-            String outNum = String.format("OUT-%s-%03d",
+            String outNum = String.format("MOUT-%s-%03d",
                     outDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")),
                     count + 1);
 
@@ -121,9 +112,100 @@ public class MaterialOutService {
                     .outAmount(outAmount)
                     .outDate(dto.getOutDate())
                     .outNum(outNum)
+                    .delYn(dto.getDelYn() != null ? Yn.valueOf(dto.getDelYn()) : Yn.N)
                     .build();
 
             materialOutRepository.save(out);
         }
     }
+
+    //
+    public List<MaterialOutDto> findAllActive() {
+        return materialOutRepository.findByDelYn(Yn.N).stream()
+                .map(out -> {
+                    Material material = out.getMaterial();
+                    MaterialIn materialIn = out.getMaterialIn();
+
+                    return MaterialOutDto.builder()
+                            .id(out.getId())
+                            .outNum(out.getOutNum())
+                            .outDate(out.getOutDate())
+                            .outAmount(out.getOutAmount())
+                            .materialCode(material != null ? material.getCode() : "")
+                            .materialName(material != null ? material.getName() : "")
+                            .manufacturer(material != null ? material.getManufacturer() : "")
+                            .companyName(
+                                    material != null && material.getCompany() != null
+                                            ? material.getCompany().getCompanyName()
+                                            : ""
+                            )
+                            .spec(material != null ? material.getSpec() : 0)
+                            .scale(material != null ? material.getScale() : "")
+                            .specAndScale(
+                                    material != null
+                                            ? material.getSpec() + material.getScale()
+                                            : ""
+                            )
+                            .inNum(materialIn != null ? materialIn.getInNum() : "")
+                            .manufactureDate(materialIn != null ? materialIn.getManufactureDate() : null)
+                            .delYn(out.getDelYn() != null ? out.getDelYn().name() : "N")
+                            .build();
+                })
+                .toList();
+    }
+
+    public void updateRegisterOut(MaterialOutDto dto) {
+        MaterialOut materialOut = materialOutRepository.findById(dto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("출고를 찾을 수 없습니다."));
+
+        int oldAmount = materialOut.getOutAmount();
+        int newAmount = Optional.ofNullable(dto.getOutAmount()).orElse(oldAmount);
+
+        if (newAmount != oldAmount) {
+            Material material = materialOut.getMaterial();
+            MaterialIn materialIn = materialOut.getMaterialIn();
+
+            // ✅ 1. MaterialStock 조정 (전체 재고)
+            MaterialStock stock = materialStockRepository.findByMaterial(material)
+                    .orElseThrow(() -> new EntityNotFoundException("품목별 재고를 찾을 수 없습니다."));
+            stock.setStock(stock.getStock() + oldAmount - newAmount); // ✅ (+old - new)
+            materialStockRepository.save(stock);
+
+            // ✅ 2. MaterialIn 조정 (해당 LOT 재고)
+            if (materialIn != null) {
+                materialIn.setStock(materialIn.getStock() + oldAmount - newAmount); // ✅ (+old - new)
+                materialInRepository.save(materialIn);
+            }
+        }
+
+        if (dto.getOutAmount() != null) materialOut.setOutAmount(dto.getOutAmount());
+        if (dto.getOutDate() != null) materialOut.setOutDate(dto.getOutDate());
+
+        materialOutRepository.save(materialOut);
+    }
+
+    public void softDelete(Long id) {
+        MaterialOut materialOut = materialOutRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("입고 데이터를 찾을 수 없습니다."));
+
+        if (materialOut.getDelYn() == Yn.Y)
+            throw new IllegalStateException("이미 삭제된 데이터입니다.");
+
+        materialOut.setDelYn(Yn.Y);
+
+        // 🔹 재고 차감
+        MaterialStock stock = materialStockRepository.findByMaterial(materialOut.getMaterial())
+                .orElseThrow(() -> new EntityNotFoundException("재고 정보를 찾을 수 없습니다."));
+        stock.setStock(stock.getStock() + materialOut.getOutAmount());
+        if (stock.getStock() < 0) stock.setStock(0);
+        materialStockRepository.save(stock);
+
+        MaterialIn materialIn = materialOut.getMaterialIn();
+        if (materialIn != null) {
+            int currentLotStock = materialIn.getStock() != null ? materialIn.getStock() : 0;
+            materialIn.setStock(currentLotStock + materialOut.getOutAmount());
+            materialInRepository.save(materialIn);
+        }
+    }
+
 }
