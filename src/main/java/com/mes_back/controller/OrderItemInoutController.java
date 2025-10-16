@@ -1,6 +1,7 @@
 package com.mes_back.controller;
 
 import com.mes_back.dto.OrderItemInOutDto;
+import com.mes_back.dto.ShipInvoiceDto;
 import com.mes_back.entity.OrderItemInout;
 import com.mes_back.service.OrderItemInoutService;
 import lombok.RequiredArgsConstructor;
@@ -84,4 +85,11 @@ public class OrderItemInoutController {
         Long deletedId = orderItemInOutService.deleteOrderItemOut(id);
         return ResponseEntity.ok(deletedId);
     }
+
+    // 출하증
+    @GetMapping("/orderitem/ship/{id}")
+    public ShipInvoiceDto getShipmentInvoice(@PathVariable Long id){
+        return orderItemInOutService.getShipmentInvoice(id);
+    }
+
 }

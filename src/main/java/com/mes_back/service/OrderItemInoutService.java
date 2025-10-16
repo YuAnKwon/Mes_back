@@ -3,6 +3,7 @@ package com.mes_back.service;
 import com.mes_back.constant.EnumKoreanMapper;
 import com.mes_back.constant.Yn;
 import com.mes_back.dto.OrderItemInOutDto;
+import com.mes_back.dto.ShipInvoiceDto;
 import com.mes_back.entity.OrderItem;
 import com.mes_back.entity.OrderItemInout;
 import com.mes_back.repository.OrderItemInoutRepository;
@@ -35,7 +36,7 @@ public class OrderItemInoutService {
         List<OrderItem> ItemList = orderItemRepository.findByUseYn(Yn.Y);
 
         List<OrderItemInOutDto> itemDtoList = new ArrayList<>();
-        for(OrderItem item : ItemList){
+        for (OrderItem item : ItemList) {
             OrderItemInOutDto itemInDto = OrderItemInOutDto.builder()
                     .id(item.getId())
                     .itemName(item.getItemName())
@@ -103,7 +104,7 @@ public class OrderItemInoutService {
 
         List<OrderItemInOutDto> itemDtoList = new ArrayList<>();
 
-        for(OrderItemInout item : itemList){
+        for (OrderItemInout item : itemList) {
             OrderItemInOutDto itemInDto = OrderItemInOutDto.builder()
                     .id(item.getId())
                     .lotNum(item.getLotNum())
@@ -184,7 +185,7 @@ public class OrderItemInoutService {
         List<OrderItemInout> itemList = orderItemInoutRepository.findByOutNumIsNotNullAndOutDelYn(Yn.N);
 
         List<OrderItemInOutDto> itemDtoList = new ArrayList<>();
-        for(OrderItemInout item : itemList){
+        for (OrderItemInout item : itemList) {
             OrderItemInOutDto itemInDto = OrderItemInOutDto.builder()
                     .id(item.getId())
                     .outNum(item.getOutNum())
@@ -224,4 +225,26 @@ public class OrderItemInoutService {
     }
 
 
+    // 출하증
+    public ShipInvoiceDto getShipmentInvoice(Long id) {
+        //id로 수주입출고 entity 찾기
+        OrderItemInout orderItemInout = orderItemInoutRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        // 주소
+        String addr = orderItemInout.getOrderItem().getCompany().getAddressBase() + " " + orderItemInout.getOrderItem().getCompany().getAddressDetail();
+
+        // 출하증 dto에 값 넣기
+        ShipInvoiceDto dto = ShipInvoiceDto.builder()
+                .id(id)
+                .companyName(orderItemInout.getOrderItem().getCompany().getCompanyName())
+                .outNum(orderItemInout.getOutNum())
+                .inDate(String.valueOf(orderItemInout.getInDate()))
+                .outDate(String.valueOf(orderItemInout.getOutDate()))
+                .companyAddr(addr)
+                .itemCode(orderItemInout.getOrderItem().getItemCode())
+                .itemName(orderItemInout.getOrderItem().getItemName())
+                .outAmount(orderItemInout.getOutAmount())
+                .build();
+        return dto;
+    }
 }

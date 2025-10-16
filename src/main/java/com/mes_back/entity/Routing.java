@@ -19,19 +19,19 @@ public class Routing extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String processCode;
+    private String processCode; // 공정코드
 
     @Column(nullable = false)
-    private String processName;
+    private String processName; // 공정명
 
     @Column(nullable = false)
-    private Integer processTime;
+    private Integer processTime; // 공정시간(분)
 
     @Column(columnDefinition = "TEXT")
-    private String remark;
+    private String remark; //비고
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Yn del_yn = Yn.N;
+    private Yn del_yn = Yn.N; //삭제 여부
 
 }

@@ -1,14 +1,8 @@
 package com.mes_back;
 
 import com.mes_back.constant.*;
-import com.mes_back.entity.Company;
-import com.mes_back.entity.Material;
-import com.mes_back.entity.MaterialIn;
-import com.mes_back.entity.OrderItem;
-import com.mes_back.repository.CompanyRepository;
-import com.mes_back.repository.MaterialInRepository;
-import com.mes_back.repository.MaterialRepository;
-import com.mes_back.repository.OrderItemRepository;
+import com.mes_back.entity.*;
+import com.mes_back.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -26,6 +20,7 @@ public class DummyDataLoader implements CommandLineRunner {
     private final CompanyRepository companyRepository;
     private final MaterialRepository materialRepository;
     private final MaterialInRepository materialInRepository;
+    private final RoutingRepository routingRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -101,6 +96,39 @@ public class DummyDataLoader implements CommandLineRunner {
 //            materialInRepository.save(materialIn);
 //        }
 
-        System.out.println("더미 Company 10개 + OrderItem 100개 삽입 완료!");
+
+        // -----------------------------
+        // 3️⃣ Routing 더미 데이터 생성
+        // -----------------------------
+        List<Routing> routings = List.of(
+                // 액체도장 공정
+                Routing.builder().processCode("LC-10").processName("입고/수입검사").processTime(10).remark("찍힘, Burr 등 유해한 흠 없을 것").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-20").processName("이물질 제거").processTime(15).remark("유분/이물질/먼지 제거").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-30").processName("마스킹 1홀(4개소)").processTime(20).remark("내부마스킹 (홀 마스킹 필름)").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-40").processName("마스킹 2").processTime(15).remark("바닥면 마스킹 (마스킹 테이프)").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-50").processName("Loading/도장").processTime(25).remark("도장망 제품 정렬/상부 도장").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-60").processName("건조").processTime(1440).remark("자연건조 1day").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-70").processName("Loading/도장").processTime(25).remark("제품 반전 / 하부 도장").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-80").processName("건조").processTime(1440).remark("자연건조 1day").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-90").processName("마스킹 제거").processTime(15).remark("마스킹 테이프/필름 제거").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-100").processName("포장").processTime(10).remark("비닐 개별포장").del_yn(Yn.N).build(),
+
+                // 분체도장 공정
+                Routing.builder().processCode("PC-10").processName("입고/수입검사").processTime(10).remark("찍힘, Burr 등 유해한 흠 없을 것").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-20").processName("탈지 1").processTime(15).remark("유분 없을 것").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-30").processName("탈지 2").processTime(15).remark("유분 없을 것").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-40").processName("LOADING").processTime(10).remark("지그 정위치 안착/Masking").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-50").processName("TORCH").processTime(10).remark("표면에 붙은 먼지, 장갑실 등 제거").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-60").processName("AIR BLOWING").processTime(10).remark("제품표면 이물질 제거").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-70").processName("PAINTING").processTime(20).remark("도막두께 40㎛ ~ 120㎛").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-80").processName("건조").processTime(20).remark("270℃ 20분 건조").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-90").processName("LOT NO MARKING").processTime(5).remark("LOT No 식별 가능하도록 마킹").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-100").processName("UNLOADING").processTime(10).remark("지그에서 제품 탈착").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-110").processName("외관검사").processTime(15).remark("도장 흘러내림, 벗겨짐, 찍힘, 미도장, BURR, 및 이물질 없음").del_yn(Yn.N).build(),
+                Routing.builder().processCode("PC-120").processName("포장").processTime(10).remark("제품 손상방지 패드 적정사용 및 정량 포장").del_yn(Yn.N).build()
+        );
+        routingRepository.saveAll(routings);
+
+        System.out.println("더미 삽입 완료!");
     }
 }
