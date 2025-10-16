@@ -45,24 +45,24 @@ public class DummyDataLoader implements CommandLineRunner {
 //
 //
 //        // 2️⃣ OrderItem 더미 생성
-//        OrderItemType[] types = OrderItemType.values();
-//        CoatingMethod[] coatings = CoatingMethod.values();
-//
-//        IntStream.rangeClosed(1, 100).forEach(i -> {
-//            OrderItem item = OrderItem.builder()
-//                    .company(companies.get(i % companies.size()))
-//                    .itemName("품목" + i)
-//                    .itemCode(String.valueOf(100 + i))
-//                    .type(types[i % types.length])       // ⚡ Enum 그대로 저장
-//                    .unitPrice(1000 + i * 10)
-//                    .color("색상" + ((i % 5) + 1))
-//                    .coatingMethod(coatings[i % coatings.length])
-//                    .remark("비고 " + i + "123123")
-//                    .useYn(Yn.Y)
-//                    .build();
-//
-//            orderItemRepository.save(item);
-//        });
+        OrderItemType[] types = OrderItemType.values();
+        CoatingMethod[] coatings = CoatingMethod.values();
+
+        IntStream.rangeClosed(1, 100).forEach(i -> {
+            OrderItem item = OrderItem.builder()
+                    .company(companies.get(i % companies.size()))
+                    .itemName("품목" + i)
+                    .itemCode(String.valueOf(100 + i))
+                    .type(types[i % types.length])       // ⚡ Enum 그대로 저장
+                    .unitPrice(1000 + i * 10)
+                    .color("색상" + ((i % 5) + 1))
+                    .coatingMethod(coatings[i % coatings.length])
+                    .remark("비고 " + i + "123123")
+                    .useYn(Yn.Y)
+                    .build();
+
+            orderItemRepository.save(item);
+        });
 
         // Material 더미
         List<Material> materials = List.of(
@@ -80,21 +80,21 @@ public class DummyDataLoader implements CommandLineRunner {
         materialRepository.saveAll(materials);
 
         // 원자재 입고 더미
-//        if (materialInRepository.count() == 0) {
-//            Material material = materialRepository.findById(1L)
-//                    .orElseThrow(() -> new RuntimeException("Material not found"));
-//
-//            MaterialIn materialIn = MaterialIn.builder()
-//                    .material(material)
-//                    .manufactureDate(new Date())
-//                    .inAmount(500)
-//                    .inNum("IN-20251010-001")
-//                    .inDate(new Date())
-//                    .delYn(Yn.N)
-//                    .build();
-//
-//            materialInRepository.save(materialIn);
-//        }
+        if (materialInRepository.count() == 0) {
+            Material material = materialRepository.findById(1L)
+                    .orElseThrow(() -> new RuntimeException("Material not found"));
+
+            MaterialIn materialIn = MaterialIn.builder()
+                    .material(material)
+                    .manufactureDate(new Date())
+                    .inAmount(500)
+                    .inNum("IN-20251010-001")
+                    .inDate(new Date())
+                    .delYn(Yn.N)
+                    .build();
+
+            materialInRepository.save(materialIn);
+        }
 
 
         // -----------------------------
