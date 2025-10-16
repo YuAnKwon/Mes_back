@@ -4,6 +4,7 @@ import com.mes_back.constant.Yn;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "Material_out")
@@ -34,7 +35,7 @@ public class MaterialOut extends BaseTimeEntity{
     private String outNum;
 
     @Column(name = "out_date", nullable = false)
-    private LocalDate outDate;
+    private Date outDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "del_yn", length = 1, nullable = false)

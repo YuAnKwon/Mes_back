@@ -41,4 +41,5 @@ public class MaterialIn extends BaseTimeEntity{
     @Column(name = "del_yn", nullable = false)
     private Yn delYn = Yn.N;
 
+    private Integer stock;
 }

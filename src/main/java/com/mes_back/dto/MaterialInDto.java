@@ -22,12 +22,12 @@ public class MaterialInDto {
 
     private String manufacturer; // 제조사
     private String inNum; // 입고번호
-    private Integer stock; // 총량
+    private Integer totalStock; // 총량
     private Date inDate; // 입고일자
     private Date manufactureDate; // 제조일자
     private String delYn;
     private String scale;
     private Integer spec;
-
+    private Integer stock;
     private String specAndScale; // 원자재 규격 + 단위
 }
