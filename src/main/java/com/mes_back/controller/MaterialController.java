@@ -1,14 +1,16 @@
 package com.mes_back.controller;
 
+import com.mes_back.constant.Yn;
 import com.mes_back.dto.CompanyListDto;
+import com.mes_back.dto.CompanyStateDto;
 import com.mes_back.dto.MaterialListDto;
+import com.mes_back.entity.Company;
+import com.mes_back.entity.Material;
 import com.mes_back.repository.MaterialRepository;
 import com.mes_back.service.MaterialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +25,15 @@ public class MaterialController {
     @GetMapping("/list")
     public ResponseEntity<List<MaterialListDto>> getAll() {
         return ResponseEntity.ok(materialService.findAll());
+    }
+
+    //원자재 거래 상태 변경
+    @PatchMapping("/{id}/state")
+    public ResponseEntity<Long> updateBusinessYn(@PathVariable Long id, @RequestBody CompanyStateDto companyStateDto ) {
+        Yn yn = Yn.valueOf(companyStateDto.getUpdatedState()); // "Y" 또는 "N" 객체
+        Long updatedId = materialService.updateBusinessYn(id, yn);
+        return ResponseEntity.ok(updatedId); // ← 반환값 사용
+
     }
 
 }

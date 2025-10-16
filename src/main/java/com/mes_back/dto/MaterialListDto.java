@@ -19,7 +19,7 @@ public class MaterialListDto {
     private String company; // 매입처명
     private String type;  // 분류 (ENUM)
     private String color;  // 색상
-    private Yn useYn;  // 사용여부 (Y/N)
+    private String useYn = "Y";  // 사용여부 (Y/N)
     private String remark; // 비고
 
     //DB에서 가져온 값을 Dto에 복사
@@ -30,7 +30,7 @@ public class MaterialListDto {
         this.company = material.getCompany().getCompanyName();
         this.type =  material.getType().name();
         this.color = material.getColor();
-        this.useYn = material.getUseYn();
+        this.useYn = EnumKoreanMapper.getBusinessYnKorean(material.getUseYn().name());
         this.remark = material.getRemark();
 
     }
