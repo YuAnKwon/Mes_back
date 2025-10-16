@@ -37,5 +37,12 @@ public class EnumKoreanMapper {
             default: return "기타";
         }
     }
+    public static String getBusinessYnKorean(String type) {
+        switch (Yn.valueOf(type)) {
+            case Y: return "거래 중";
+            case N: return "거래 종료";
+            default: return "기타";
+        }
+    }
 }
 
