@@ -1,6 +1,7 @@
 package com.mes_back.dto;
 
 import com.mes_back.constant.CompanyType;
+import com.mes_back.entity.Company;
 import lombok.*;
 
 @Getter
@@ -11,7 +12,6 @@ import lombok.*;
 @ToString
 public class CompanyDto {
 
-    private Long id;
     private CompanyType companyType;
     private String companyName;
     private String ceoName;
@@ -24,5 +24,23 @@ public class CompanyDto {
     private String managerName;
     private String managerPhone;
     private String managerEmail;
+
+    public static CompanyDto fromEntity(Company company) {
+        return CompanyDto.builder()
+                .companyType(company.getCompanyType())
+                .companyName(company.getCompanyName())
+                .ceoName(company.getCeoName())
+                .ceoPhone(company.getCeoPhone())
+                .businessNum(company.getBusinessNum())
+                .zipcode(company.getZipcode())
+                .addressBase(company.getAddressBase())
+                .addressDetail(company.getAddressDetail())
+                .remark(company.getRemark())
+                .managerName(company.getManagerName())
+                .managerPhone(company.getManagerPhone())
+                .managerEmail(company.getManagerEmail())
+                .build();
+    }
+
 
 }

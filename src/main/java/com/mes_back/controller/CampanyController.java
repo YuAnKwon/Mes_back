@@ -24,7 +24,7 @@ public class CampanyController {
     //입력된 데이터를 CompanyDto 객체로 매핑, Service에 있는 등록 로직으로 등록처리(Dto -> Entity -> DB), 등록된 업체 정보를 응답으로 반환
     @PostMapping("/register")
     public ResponseEntity<Company> register(@RequestBody CompanyDto companyDto) {
-        Company saved = companyService.registerCompany(companyDto);
+        Company saved = companyService.saveCompany(null, companyDto);
         return ResponseEntity.ok(saved);
     }
 
@@ -42,5 +42,27 @@ public class CampanyController {
         return ResponseEntity.ok(updatedCompany); // ← 반환값 사용
 
     }
+
+    //업체 상세 조회
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<CompanyDto> getDetail(@PathVariable Long id) {
+        return ResponseEntity.ok(companyService.getCompanyDetail(id));
+    }
+
+
+    //업체 수정
+    @PatchMapping("/detail/{id}")
+    public ResponseEntity<String> updateDetail(
+            @PathVariable Long id,
+            @RequestBody CompanyDto dto
+    ) {
+        companyService.saveCompany(id, dto);
+        return ResponseEntity.ok("업체 정보 수정 완료");
+    }
+
+
+
+
+
 
 }
