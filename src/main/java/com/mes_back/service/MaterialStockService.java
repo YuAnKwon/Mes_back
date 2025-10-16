@@ -30,6 +30,7 @@ public class MaterialStockService {
                             .materialName(m.getName())
                             .manufacturer(m.getManufacturer())
                             .stock(stock.getStock())
+
                             .build();
                 })
                 .toList();

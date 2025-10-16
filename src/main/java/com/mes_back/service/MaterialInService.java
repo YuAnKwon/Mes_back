@@ -48,6 +48,8 @@ public class MaterialInService {
     // 전체 조회 (삭제 안된것들)
     public List<MaterialInDto> findAllActive() {
         return materialInRepository.findByDelYn(Yn.N).stream()
+                // 🔸 재고가 0보다 큰 경우만 표시
+                .filter(in -> in.getStock() != null && in.getStock() > 0)
                 .map(in -> {
                     Material m = in.getMaterial();
                     if (m == null) return null;
@@ -125,12 +127,12 @@ public class MaterialInService {
                 count = lotCountMap.get(inDate);
             } else {
                 count = materialInRepository.countByInNumStartingWith(
-                        "LOT-" + inDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+                        "MINC-" + inDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
                 );
             }
 
             // 4️⃣ LOT 번호 생성
-            String lotNum = String.format("LOT-%s-%03d",
+            String lotNum = String.format("MINC-%s-%03d",
                     inDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")),
                     count + 1);
 
@@ -169,18 +171,27 @@ public class MaterialInService {
         int oldAmount = materialIn.getInAmount();
         int newAmount = Optional.ofNullable(dto.getInAmount()).orElse(oldAmount);
 
-        // 재고 조정 필요 여부 확인
         if (newAmount != oldAmount) {
-            MaterialStock stock = materialStockRepository.findByMaterial(materialIn.getMaterial())
+            Material material = materialIn.getMaterial();
+
+            // ✅ 1. LOT(입고 단위) 재고 수정
+            int oldStock = Optional.ofNullable(materialIn.getStock()).orElse(0);
+            materialIn.setStock(oldStock + newAmount - oldAmount); // ✅ (+new - old)
+            materialInRepository.save(materialIn);
+
+            // ✅ 2. 품목별 전체 재고 수정
+            MaterialStock stock = materialStockRepository.findByMaterial(material)
                     .orElseThrow(() -> new EntityNotFoundException("재고 정보를 찾을 수 없습니다."));
-            stock.setStock(stock.getStock() - oldAmount + newAmount);
+            stock.setStock(stock.getStock() + newAmount - oldAmount); // ✅ (+new - old)
             materialStockRepository.save(stock);
         }
 
+        // ✅ 3. 기본 정보 갱신
         if (dto.getInAmount() != null) materialIn.setInAmount(dto.getInAmount());
         if (dto.getInDate() != null) materialIn.setInDate(dto.getInDate());
         if (dto.getManufactureDate() != null) materialIn.setManufactureDate(dto.getManufactureDate());
 
+        materialInRepository.save(materialIn);
     }
 
 
