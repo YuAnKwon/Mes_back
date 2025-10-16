@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +51,12 @@ public class MaterialInController {
             return ResponseEntity.internalServerError()
                     .body("입고 수정 중 오류 발생: " + e.getMessage());
         }
+    }
+
+    // 입고 삭제
+    @DeleteMapping("/in/{id}")
+    public ResponseEntity<?> softDelete(@PathVariable Long id){
+        materialInService.softDelete(id);
+        return ResponseEntity.ok("삭제되었습니다");
     }
 }

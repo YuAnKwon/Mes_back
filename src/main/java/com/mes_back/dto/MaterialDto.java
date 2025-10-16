@@ -18,4 +18,6 @@ public class MaterialDto {
     private String manufacturer; // 제조사
     private String remark; // 비고
     private String specAndScale; // 원자재 규격 + 단위
+    private Integer stock;
+
 }
