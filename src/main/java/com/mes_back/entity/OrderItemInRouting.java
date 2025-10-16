@@ -17,7 +17,7 @@ import java.util.Date;
 public class OrderItemInRouting extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "order_item_in_routing_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

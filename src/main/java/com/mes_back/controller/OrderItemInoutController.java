@@ -1,6 +1,7 @@
 package com.mes_back.controller;
 
 import com.mes_back.dto.OrderItemInOutDto;
+import com.mes_back.dto.ProcessStatusDto;
 import com.mes_back.dto.ShipInvoiceDto;
 import com.mes_back.entity.OrderItemInout;
 import com.mes_back.service.OrderItemInoutService;
@@ -22,6 +23,7 @@ public class OrderItemInoutController {
         return orderItemInOutService.getOrderItemInRegi();
     }
 
+    // 입고 등록
     @PostMapping("/orderitem/in/register")
     public ResponseEntity<?> orderItemInRegister(@RequestBody List<OrderItemInOutDto> orderItemInOutDto){
         try {
@@ -84,6 +86,12 @@ public class OrderItemInoutController {
     public ResponseEntity<?> deleteOrderItemOut(@PathVariable Long id){
         Long deletedId = orderItemInOutService.deleteOrderItemOut(id);
         return ResponseEntity.ok(deletedId);
+    }
+
+    // 공정 진행현황 조회 페이지 -> 라우팅 조회
+    @GetMapping("/orderitem/process/{id}")
+    public List<ProcessStatusDto> getRouting(@PathVariable Long id){
+        return orderItemInOutService.getRouting(id);
     }
 
     // 출하증

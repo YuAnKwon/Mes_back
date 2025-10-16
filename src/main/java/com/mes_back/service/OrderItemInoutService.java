@@ -1,16 +1,21 @@
 package com.mes_back.service;
 
+import com.mes_back.constant.CompletedStatus;
 import com.mes_back.constant.EnumKoreanMapper;
 import com.mes_back.constant.Yn;
 import com.mes_back.dto.OrderItemInOutDto;
+import com.mes_back.dto.ProcessStatusDto;
 import com.mes_back.dto.ShipInvoiceDto;
 import com.mes_back.entity.OrderItem;
+import com.mes_back.entity.OrderItemInRouting;
 import com.mes_back.entity.OrderItemInout;
+import com.mes_back.entity.OrderItemRouting;
+import com.mes_back.repository.OrderItemInRoutingRepository;
 import com.mes_back.repository.OrderItemInoutRepository;
 import com.mes_back.repository.OrderItemRepository;
+import com.mes_back.repository.OrderItemRoutingRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +35,8 @@ import java.util.Map;
 public class OrderItemInoutService {
     private final OrderItemRepository orderItemRepository;
     private final OrderItemInoutRepository orderItemInoutRepository;
+    private final OrderItemRoutingRepository orderItemRoutingRepository;
+    private final OrderItemInRoutingRepository orderItemInRoutingRepository;
 
     public List<OrderItemInOutDto> getOrderItemInRegi() {
         // 사용여부가 Y인것만 찾기
@@ -95,6 +102,20 @@ public class OrderItemInoutService {
                     .build();
 
             orderItemInoutRepository.save(orderItemInout);
+
+            // 입고 라우팅 저장
+            List<OrderItemRouting> routings = orderItemRoutingRepository.findByOrderItem(orderItem);
+
+            for (OrderItemRouting routing : routings) {
+                OrderItemInRouting orderItemInRouting = OrderItemInRouting.builder()
+                        .orderItemInout(orderItemInout)
+                        .orderItemRouting(routing)
+                        .completedStatus(CompletedStatus.N)
+                        .startTime(null)
+                        .build();
+
+                orderItemInRoutingRepository.save(orderItemInRouting);
+            }
         }
     }
 
@@ -246,5 +267,29 @@ public class OrderItemInoutService {
                 .outAmount(orderItemInout.getOutAmount())
                 .build();
         return dto;
+    }
+
+    //여기 id는 입출고 id임
+    public List<ProcessStatusDto> getRouting(Long id) {
+        // 입출고 id 받아와서 입고라우팅에서 찾기
+        OrderItemInout inout = orderItemInoutRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        List<OrderItemInRouting> list = orderItemInRoutingRepository.findByOrderItemInout(inout);
+
+        List<ProcessStatusDto> dtoList = new ArrayList<>();
+        for(OrderItemInRouting routing : list){
+            ProcessStatusDto dto = ProcessStatusDto.builder()
+                    .id(routing.getId())
+                    .routingOrder(routing.getOrderItemRouting().getRoutingOrder())
+                    .processCode(routing.getOrderItemRouting().getRouting().getProcessCode())
+                    .processName(routing.getOrderItemRouting().getRouting().getProcessName())
+                    .processTime(routing.getOrderItemRouting().getRouting().getProcessTime())
+                    .remark(routing.getOrderItemRouting().getRouting().getRemark())
+                    .startTime(String.valueOf(routing.getStartTime()))
+                    .completedStatus(String.valueOf(routing.getCompletedStatus()))
+                    .build();
+
+            dtoList.add(dto);
+        }
+        return dtoList;
     }
 }

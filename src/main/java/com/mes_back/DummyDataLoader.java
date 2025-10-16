@@ -21,6 +21,7 @@ public class DummyDataLoader implements CommandLineRunner {
     private final MaterialRepository materialRepository;
     private final MaterialInRepository materialInRepository;
     private final RoutingRepository routingRepository;
+    private final OrderItemRoutingRepository orderItemRoutingRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -107,9 +108,9 @@ public class DummyDataLoader implements CommandLineRunner {
                 Routing.builder().processCode("LC-30").processName("마스킹 1홀(4개소)").processTime(20).remark("내부마스킹 (홀 마스킹 필름)").del_yn(Yn.N).build(),
                 Routing.builder().processCode("LC-40").processName("마스킹 2").processTime(15).remark("바닥면 마스킹 (마스킹 테이프)").del_yn(Yn.N).build(),
                 Routing.builder().processCode("LC-50").processName("Loading/도장").processTime(25).remark("도장망 제품 정렬/상부 도장").del_yn(Yn.N).build(),
-                Routing.builder().processCode("LC-60").processName("건조").processTime(1440).remark("자연건조 1day").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-60").processName("건조 1").processTime(1440).remark("자연건조 1day").del_yn(Yn.N).build(),
                 Routing.builder().processCode("LC-70").processName("Loading/도장").processTime(25).remark("제품 반전 / 하부 도장").del_yn(Yn.N).build(),
-                Routing.builder().processCode("LC-80").processName("건조").processTime(1440).remark("자연건조 1day").del_yn(Yn.N).build(),
+                Routing.builder().processCode("LC-80").processName("건조 2").processTime(1440).remark("자연건조 1day").del_yn(Yn.N).build(),
                 Routing.builder().processCode("LC-90").processName("마스킹 제거").processTime(15).remark("마스킹 테이프/필름 제거").del_yn(Yn.N).build(),
                 Routing.builder().processCode("LC-100").processName("포장").processTime(10).remark("비닐 개별포장").del_yn(Yn.N).build(),
 
@@ -128,6 +129,42 @@ public class DummyDataLoader implements CommandLineRunner {
                 Routing.builder().processCode("PC-120").processName("포장").processTime(10).remark("제품 손상방지 패드 적정사용 및 정량 포장").del_yn(Yn.N).build()
         );
         routingRepository.saveAll(routings);
+
+        // -----------------------------
+        // OrderItemRouting + OrderItemInRouting 더미 생성
+        // -----------------------------
+        // -----------------------------
+        // OrderItemRouting + OrderItemInRouting 더미 생성 (총 20개 정도)
+        // -----------------------------
+        List<OrderItem> orderItems = orderItemRepository.findAll();
+        List<Routing> allRoutings = routingRepository.findAll();
+
+        // 액체도장 라우팅과 분체도장 라우팅 미리 분리
+        List<Routing> liquidRoutings = allRoutings.stream()
+                .filter(r -> r.getProcessCode().startsWith("LC"))
+                .limit(10) // 액체 10개만 사용
+                .toList();
+
+        List<Routing> powderRoutings = allRoutings.stream()
+                .filter(r -> r.getProcessCode().startsWith("PC"))
+                .limit(10) // 분체 10개만 사용
+                .toList();
+
+        // OrderItem 5개만 사용 (조정 가능)
+        orderItems.stream().limit(5).forEach(item -> {
+            boolean isLiquid = item.getItemCode().startsWith("1"); // 예시 조건
+            List<Routing> routingList = isLiquid ? liquidRoutings : powderRoutings;
+
+            int order = 1;
+            for (Routing routing : routingList) {
+                OrderItemRouting itemRouting = OrderItemRouting.builder()
+                        .orderItem(item)
+                        .routing(routing)
+                        .routingOrder(order++)
+                        .build();
+                orderItemRoutingRepository.save(itemRouting);
+            }
+        });
 
         System.out.println("더미 삽입 완료!");
     }

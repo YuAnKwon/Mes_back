@@ -8,10 +8,16 @@ import lombok.*;
 @Builder
 public class ProcessStatusDto {
     private Long id;
+    private Integer routingOrder;
     private String processCode;
     private String processName;
-    private Integer processTime; // 분
+    private Integer processTime;
     private String remark;
     private String completedStatus; // "대기", "진행중", "완료"
     private String startTime;
 }
+
+
+
+
+

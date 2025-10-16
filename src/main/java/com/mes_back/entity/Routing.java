@@ -15,6 +15,7 @@ import lombok.*;
 public class Routing extends BaseTimeEntity {
 
     @Id
+    @Column(name = "routing_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
