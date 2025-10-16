@@ -57,10 +57,15 @@ public class CompanyService {
     }
 
     //업체 거래상태 변경
+    @Transactional
     public Company updateBusinessYn(Long id, Yn updatedYn) {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 업체가 존재하지 않습니다."));
-        company.setBusinessYn(updatedYn);
+        if( updatedYn == Yn.Y ) {
+            company.setBusinessYn(Yn.N);
+        }else {
+            company.setBusinessYn(Yn.Y);
+        }
         return companyRepository.save(company);
     }
 
@@ -70,8 +75,5 @@ public class CompanyService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 업체가 존재하지 않습니다."));
         return CompanyDto.fromEntity(company);
     }
-
-
-
 
 }

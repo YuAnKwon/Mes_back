@@ -16,6 +16,8 @@ public class MaterialDto {
     private Integer spec; // 규격
     private String scale; // 단위
     private String manufacturer; // 제조사
+    private String type;  // 분류 (ENUM)
+    private String color;  // 색상
     private String remark; // 비고
     private String specAndScale; // 원자재 규격 + 단위
     private Integer stock;

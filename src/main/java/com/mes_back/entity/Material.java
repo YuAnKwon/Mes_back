@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Table(name = "material")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
