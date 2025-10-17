@@ -6,6 +6,9 @@ import com.mes_back.entity.Company;
 import com.mes_back.entity.Material;
 import com.mes_back.entity.OrderItem;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,6 +27,8 @@ public class OrderItemDto {
     private Integer unitPrice; // 품목단가
     private String color; // 색상
     private String remark; // 비고
+
+    private List<MultipartFile> imgUrl;
 
     public static OrderItemDto fromEntity(OrderItem orderItem) {
         return OrderItemDto.builder()

@@ -34,6 +34,6 @@ public class OrderItemImg extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Yn repYn = Yn.Y;
+    private Yn repYn = Yn.Y;//대표이미지
 
 }

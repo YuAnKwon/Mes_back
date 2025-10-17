@@ -9,6 +9,7 @@ import com.mes_back.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,8 +23,14 @@ public class OrderItemController {
 
     //입력된 데이터를 OrderItemDto 객체로 매핑, Service에 있는 등록 로직으로 등록처리(Dto -> Entity -> DB), 등록된 업체 정보를 응답으로 반환
     @PostMapping("/register")
-    public ResponseEntity<OrderItem> register(@RequestBody OrderItemDto orderItemDto) {
-        OrderItem saved = orderItemService.saveOrderItem(null, orderItemDto);
+    public ResponseEntity<OrderItem> register(
+            @RequestPart("data") OrderItemDto orderItemDto,
+            @RequestPart(value = "imgUrl", required = false) List<MultipartFile> imgFiles) {
+
+        OrderItem saved = orderItemService.saveOrderItem(null, orderItemDto, imgFiles);
+
+        System.out.println("imgFiles: " + (imgFiles == null ? "null" : imgFiles.size() + "개"));
+
         return ResponseEntity.ok(saved);
     }
 
@@ -53,9 +60,10 @@ public class OrderItemController {
     @PatchMapping("/detail/{id}")
     public ResponseEntity<String> updateDetail(
             @PathVariable Long id,
-            @RequestBody OrderItemDto dto
+            @RequestPart("data") OrderItemDto dto,
+            @RequestPart(value = "imgUrl", required = false) List<MultipartFile> imgFiles
     ) {
-        orderItemService.saveOrderItem(id, dto);
+        orderItemService.saveOrderItem(id, dto, imgFiles);
         return ResponseEntity.ok("수주대상품목 정보 수정 완료");
     }
 
