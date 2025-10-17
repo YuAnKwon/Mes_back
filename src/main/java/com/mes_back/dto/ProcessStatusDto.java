@@ -1,5 +1,6 @@
 package com.mes_back.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter

@@ -292,4 +292,16 @@ public class OrderItemInoutService {
         }
         return dtoList;
     }
+
+    public Long updateProcessStatus(Long id, ProcessStatusDto dto) {
+        // 수주입고 라우팅 id로 수주입출고 라우팅 테이블 찾기
+        OrderItemInRouting orderItemInRouting = orderItemInRoutingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        Instant instant = Instant.parse(dto.getStartTime()); // "2025-10-15T15:00:00.000Z"
+        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        orderItemInRouting.setStartTime(Date.valueOf(localDate));
+        orderItemInRouting.setCompletedStatus(CompletedStatus.valueOf(dto.getCompletedStatus()));
+        orderItemInRoutingRepository.save(orderItemInRouting);
+        return orderItemInRouting.getId();
+    }
 }
