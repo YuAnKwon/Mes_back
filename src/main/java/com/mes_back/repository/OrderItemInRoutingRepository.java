@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface OrderItemInRoutingRepository extends JpaRepository<OrderItemInRouting,Long> {
     List<OrderItemInRouting> findByOrderItemInout(OrderItemInout orderItemInout);
+
+    List<OrderItemInRouting> findByOrderItemInoutId(Long orderItemId);
 }
