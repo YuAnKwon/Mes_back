@@ -21,5 +21,5 @@ public class MaterialDto {
     private String remark; // 비고
     private String specAndScale; // 원자재 규격 + 단위
     private Integer stock;
-
+    private String useYn; // 거래여부
 }
