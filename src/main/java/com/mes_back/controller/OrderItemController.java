@@ -23,15 +23,16 @@ public class OrderItemController {
 
     //입력된 데이터를 OrderItemDto 객체로 매핑, Service에 있는 등록 로직으로 등록처리(Dto -> Entity -> DB), 등록된 업체 정보를 응답으로 반환
     @PostMapping("/register")
-    public ResponseEntity<OrderItem> register(
+    public ResponseEntity<OrderItemDto> register(
             @RequestPart("data") OrderItemDto orderItemDto,
             @RequestPart(value = "imgUrl", required = false) List<MultipartFile> imgFiles) {
 
         OrderItem saved = orderItemService.saveOrderItem(null, orderItemDto, imgFiles);
 
-        System.out.println("imgFiles: " + (imgFiles == null ? "null" : imgFiles.size() + "개"));
 
-        return ResponseEntity.ok(saved);
+        System.out.println("imgFiles: " + (imgFiles == null ? "null" : imgFiles.size() + "개"));
+        OrderItemDto responseDto = OrderItemDto.fromEntity(saved);
+        return ResponseEntity.ok(responseDto);
     }
 
     //서비스 계층의 findAll() 메서드를 호출해 업체 목록 조회 OrderItemListDto 리스트로 반환

@@ -7,6 +7,9 @@ import com.mes_back.constant.Yn;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "order_item")
 @Getter
@@ -52,4 +55,7 @@ public class OrderItem extends BaseTimeEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Yn useYn = Yn.Y; // 사용여부
+
+    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItemImg> images = new ArrayList<>();
 }

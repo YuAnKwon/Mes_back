@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -28,9 +29,15 @@ public class OrderItemDto {
     private String color; // 색상
     private String remark; // 비고
 
-    private List<MultipartFile> imgUrl;
+    private List<OrderItemImgDto> images;
 
     public static OrderItemDto fromEntity(OrderItem orderItem) {
+
+        List<OrderItemImgDto> images = orderItem.getImages().stream()
+                .map(OrderItemImgDto::fromEntity)
+                .collect(Collectors.toList());
+
+
         return OrderItemDto.builder()
                 .id(orderItem.getId())
                 .company(orderItem.getCompany().getCompanyName())
@@ -41,6 +48,7 @@ public class OrderItemDto {
                 .unitPrice(orderItem.getUnitPrice())
                 .color(orderItem.getColor())
                 .remark(orderItem.getRemark())
+                .images(images) // 👈 여기 포함
                 .build();
     }
 
