@@ -34,4 +34,6 @@ public class OrderItemInOutDto {
 
     private String outDate; // 출고일자
 
+    private String isProcessCompleted; //공정 진행 완료 여부
+
 }

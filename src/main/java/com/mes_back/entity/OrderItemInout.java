@@ -47,6 +47,10 @@ public class OrderItemInout extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    private Yn isProcessCompleted;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn outDelYn = Yn.N;
 
 }

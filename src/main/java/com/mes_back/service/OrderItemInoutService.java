@@ -100,6 +100,7 @@ public class OrderItemInoutService {
                     .inDate(Date.valueOf(inDate))
                     .inDelYn(Yn.N)
                     .outDelYn(Yn.N)
+                    .isProcessCompleted(Yn.N)
                     .build();
 
             orderItemInoutRepository.save(orderItemInout);
@@ -136,6 +137,7 @@ public class OrderItemInoutService {
                     .type(EnumKoreanMapper.getOrderItemTypeKorean(item.getOrderItem().getType().name())) // 한글 변환
                     .inAmount(item.getInAmount())
                     .inDate(String.valueOf(item.getInDate()))
+                    .isProcessCompleted(String.valueOf(item.getIsProcessCompleted()))
                     .build();
 
             itemDtoList.add(itemInDto);
@@ -308,6 +310,20 @@ public class OrderItemInoutService {
         }
         orderItemInRouting.setCompletedStatus(CompletedStatus.valueOf(dto.getCompletedStatus()));
         orderItemInRoutingRepository.save(orderItemInRouting);
+
+        // 같은 수주 품목(OrderItem) 내 모든 공정의 완료 여부 확인
+        // 입고라우팅테이블에서 입출고 id가 같은 공정들의 공정 진행상태가 Y인지 확인하는거.
+        Long orderItemInoutId = orderItemInRouting.getOrderItemInout().getId();
+        List<OrderItemInRouting> allRoutings = orderItemInRoutingRepository.findByOrderItemInoutId(orderItemInoutId);
+
+        boolean allCompleted = allRoutings.stream()
+                .allMatch(r -> r.getCompletedStatus() == CompletedStatus.Y);
+
+        // 모든 공정이 완료된 경우 isProcessCompleted = "Y", 아니면 "N"
+        OrderItemInout orderItemInout = orderItemInRouting.getOrderItemInout();
+        orderItemInout.setIsProcessCompleted(allCompleted ? Yn.Y : Yn.N);
+        orderItemInoutRepository.save(orderItemInout);
+
         return orderItemInRouting.getId();
     }
 }
