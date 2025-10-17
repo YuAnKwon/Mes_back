@@ -11,13 +11,18 @@ import com.mes_back.dto.OrderItemListDto;
 import com.mes_back.entity.Company;
 import com.mes_back.entity.Material;
 import com.mes_back.entity.OrderItem;
+import com.mes_back.entity.OrderItemImg;
 import com.mes_back.repository.CompanyRepository;
 import com.mes_back.repository.OrderItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,11 +31,12 @@ public class OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
     private final CompanyRepository companyRepository;
+    private final OrderItemImgService orderItemImgService; // 👈 주입
 
     //register and update
     //업체 등록(Dto에서 받은 값을 새로 생성한 OrderItem(엔티티) 객체에 넣기 ==> DB에 저장)
     @Transactional
-    public OrderItem saveOrderItem(Long id, OrderItemDto dto) {
+    public OrderItem saveOrderItem(Long id, OrderItemDto dto, List<MultipartFile> imgFiles) {
         OrderItem orderItem;
 
         if (id == null) {
@@ -58,7 +64,13 @@ public class OrderItemService {
         orderItem.setUnitPrice(dto.getUnitPrice());
         orderItem.setColor(dto.getColor());
         orderItem.setRemark(dto.getRemark());
-        return orderItemRepository.save(orderItem);
+
+        OrderItem savedOrderItem = orderItemRepository.save(orderItem);
+
+        // 👈 이미지 저장 서비스 호출
+        orderItemImgService.saveImages(savedOrderItem, imgFiles);
+
+        return savedOrderItem;
     }
 
     //수주 품목 대상 조회(Entity -> Dto)
