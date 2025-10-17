@@ -18,7 +18,7 @@ public class OrderItemService {
     //수주 품목 대상 조회(Entity -> Dto)
     public List<OrderItemListDto> findAll() {
         return orderItemRepository.findAll().stream()
-                .map(MaterialListDto::new)
+                .map(OrderItemListDto::new)
                 .collect(Collectors.toList());
     }
 }
