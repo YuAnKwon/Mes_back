@@ -33,6 +33,6 @@ public class Routing extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Yn del_yn = Yn.N; //삭제 여부
+    private Yn delYn = Yn.N; //삭제 여부
 
 }

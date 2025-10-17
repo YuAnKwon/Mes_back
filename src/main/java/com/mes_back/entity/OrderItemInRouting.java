@@ -4,6 +4,7 @@ import com.mes_back.constant.CompletedStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -32,6 +33,6 @@ public class OrderItemInRouting extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private CompletedStatus completedStatus = CompletedStatus.N;
 
-    private Date startTime;
+    private LocalDateTime startTime;
 
 }
