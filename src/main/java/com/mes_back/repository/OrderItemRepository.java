@@ -10,6 +10,8 @@ import java.util.List;
 
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
-    List<OrderItem> findByUseYn(Yn yn);
+
+    List<OrderItem> findByUseYn(Yn Yn);
+    List<OrderItem> findByCompany_BusinessYn(Yn businessYn);
 
 }
