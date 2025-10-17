@@ -28,7 +28,7 @@ public class MaterialListDto {
         this.name = material.getName();
         this.code = material.getCode();
         this.company = material.getCompany().getCompanyName();
-        this.type =  material.getType().name();
+        this.type =  EnumKoreanMapper.getMaterialTypeKorean(material.getCompany().getCompanyType().name());
         this.color = material.getColor();
         this.useYn = EnumKoreanMapper.getBusinessYnKorean(material.getUseYn().name());
         this.remark = material.getRemark();

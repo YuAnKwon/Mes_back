@@ -15,7 +15,7 @@ import lombok.*;
 public class Routing extends BaseTimeEntity {
 
     @Id
-    @Column(name = "routing_id")
+    @Column(name = "id")//컬럼명 오류나서 routing_id를 id로 변경함
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -33,6 +33,6 @@ public class Routing extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Yn del_yn = Yn.N; //삭제 여부
+    private Yn delYn = Yn.N; //삭제 여부
 
 }
