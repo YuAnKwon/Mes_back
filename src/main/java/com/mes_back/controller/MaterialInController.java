@@ -2,6 +2,7 @@ package com.mes_back.controller;
 
 import com.mes_back.dto.MaterialInDto;
 import com.mes_back.service.MaterialInService;
+import com.mes_back.service.MaterialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,8 @@ import java.util.Map;
 public class MaterialInController {
 
     private final MaterialInService materialInService;
-
+    private final MaterialService materialService;
+    
     @GetMapping
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(materialInService.findAll());

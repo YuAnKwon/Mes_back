@@ -29,7 +29,7 @@ public class MaterialInService {
     private final MaterialStockRepository materialStockRepository;
 
     public List<MaterialDto> findAll() {
-        return materialRepository.findAll().stream()
+        return materialRepository.findByUseYn(Yn.Y).stream()
                 .map(material -> MaterialDto.builder()
                         .id(material.getId())
                         .materialName(material.getName())
@@ -39,7 +39,7 @@ public class MaterialInService {
                         .scale(material.getScale())
                         .specAndScale(material.getSpec()+material.getScale())
                         .manufacturer(material.getManufacturer())
-
+                        .useYn(material.getUseYn().name())
                         .remark(material.getRemark())
                         .build())
                 .toList();
