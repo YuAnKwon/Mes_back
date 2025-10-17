@@ -94,6 +94,13 @@ public class OrderItemInoutController {
         return orderItemInOutService.getRouting(id);
     }
 
+    // 진행현황 상태, 시작시간 수정
+    @PutMapping("/orderitem/process/{id}")
+    public ResponseEntity<?> updateProcessStatus(@PathVariable Long id, @RequestBody ProcessStatusDto dto){
+        Long updatedId = orderItemInOutService.updateProcessStatus(id, dto);
+        return ResponseEntity.ok(updatedId);
+    }
+
     // 출하증
     @GetMapping("/orderitem/ship/{id}")
     public ShipInvoiceDto getShipmentInvoice(@PathVariable Long id){

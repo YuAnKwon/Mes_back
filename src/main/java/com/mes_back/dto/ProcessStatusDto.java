@@ -13,7 +13,7 @@ public class ProcessStatusDto {
     private String processName;
     private Integer processTime;
     private String remark;
-    private String completedStatus; // "대기", "진행중", "완료"
+    private String completedStatus;
     private String startTime;
 }
 

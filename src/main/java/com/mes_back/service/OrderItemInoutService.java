@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -276,7 +277,7 @@ public class OrderItemInoutService {
         List<OrderItemInRouting> list = orderItemInRoutingRepository.findByOrderItemInout(inout);
 
         List<ProcessStatusDto> dtoList = new ArrayList<>();
-        for(OrderItemInRouting routing : list){
+        for (OrderItemInRouting routing : list) {
             ProcessStatusDto dto = ProcessStatusDto.builder()
                     .id(routing.getId())
                     .routingOrder(routing.getOrderItemRouting().getRoutingOrder())
@@ -291,5 +292,22 @@ public class OrderItemInoutService {
             dtoList.add(dto);
         }
         return dtoList;
+    }
+
+    public Long updateProcessStatus(Long id, ProcessStatusDto dto) {
+        // 수주입고 라우팅 id로 수주입출고 라우팅 테이블 찾기
+        OrderItemInRouting orderItemInRouting = orderItemInRoutingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        // 빈 문자열이 오면 null 로 바꾸기
+        if (dto.getStartTime() == null | dto.getStartTime().isBlank()) {
+            orderItemInRouting.setStartTime(null);
+        } else {
+            Instant instant = Instant.parse(dto.getStartTime()); // "2025-10-15T15:00:00.000Z"
+            LocalDateTime localDateTime = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+            orderItemInRouting.setStartTime(localDateTime);
+        }
+        orderItemInRouting.setCompletedStatus(CompletedStatus.valueOf(dto.getCompletedStatus()));
+        orderItemInRoutingRepository.save(orderItemInRouting);
+        return orderItemInRouting.getId();
     }
 }
