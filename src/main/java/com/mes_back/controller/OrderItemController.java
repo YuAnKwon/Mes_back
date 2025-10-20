@@ -58,7 +58,7 @@ public class OrderItemController {
 
 
     //수주대상품목 수정
-    @PatchMapping("/detail/{id}")
+    @PutMapping("/detail/{id}")
     public ResponseEntity<String> updateDetail(
             @PathVariable Long id,
             @RequestPart("data") OrderItemDto dto,
