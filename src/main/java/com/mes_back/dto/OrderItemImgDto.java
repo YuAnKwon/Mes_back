@@ -25,7 +25,7 @@ public class OrderItemImgDto {
         OrderItemImgDto dto = new OrderItemImgDto();
         dto.setImgOriName(img.getImgOriName());
         dto.setImgFileName(img.getImgFileName());
-        dto.setImgUrl(img.getImgUrl());
+        dto.setImgUrl("/api" + img.getImgUrl());
         dto.setRepYn(img.getRepYn());
         return dto;
     }

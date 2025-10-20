@@ -55,7 +55,7 @@ public class OrderItemImgService {
             img.setOrderItem(orderItem);
             img.setImgOriName(oriName);
             img.setImgFileName(savedName);
-            img.setImgUrl("/img/" + savedName);//클라이언트가 접근할 URL(또는 리소스 핸들러 매핑 경로) 설정.
+            img.setImgUrl("/image/img/" + savedName);//클라이언트가 접근할 URL(또는 리소스 핸들러 매핑 경로) 설정.
 
             OrderItemImgRepository.save(img);
         }
