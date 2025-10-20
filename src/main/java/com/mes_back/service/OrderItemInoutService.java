@@ -3,17 +3,9 @@ package com.mes_back.service;
 import com.mes_back.constant.CompletedStatus;
 import com.mes_back.constant.EnumKoreanMapper;
 import com.mes_back.constant.Yn;
-import com.mes_back.dto.OrderItemInOutDto;
-import com.mes_back.dto.ProcessStatusDto;
-import com.mes_back.dto.ShipInvoiceDto;
-import com.mes_back.entity.OrderItem;
-import com.mes_back.entity.OrderItemInRouting;
-import com.mes_back.entity.OrderItemInout;
-import com.mes_back.entity.OrderItemRouting;
-import com.mes_back.repository.OrderItemInRoutingRepository;
-import com.mes_back.repository.OrderItemInoutRepository;
-import com.mes_back.repository.OrderItemRepository;
-import com.mes_back.repository.OrderItemRoutingRepository;
+import com.mes_back.dto.*;
+import com.mes_back.entity.*;
+import com.mes_back.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,6 +30,8 @@ public class OrderItemInoutService {
     private final OrderItemInoutRepository orderItemInoutRepository;
     private final OrderItemRoutingRepository orderItemRoutingRepository;
     private final OrderItemInRoutingRepository orderItemInRoutingRepository;
+    private final RoutingRepository routingRepository;
+
 
     public List<OrderItemInOutDto> getOrderItemInRegi() {
         // 사용여부가 Y인것만 찾기
@@ -326,4 +320,33 @@ public class OrderItemInoutService {
 
         return orderItemInRouting.getId();
     }
+
+//    public WorkOrderDto getWorkOrder(Long id) {
+//        // 입출고
+//        OrderItemInout orderItemInout = orderItemInoutRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("OrderItemInout Entity not found"));
+//
+//        // 수주품목
+//        OrderItem orderItem = orderItemInout.getOrderItem();
+//        OrderItemDto orderItemDto = OrderItemDto.fromEntity(orderItem);
+//
+//        // 2. Routing 리스트 조회
+//        List<Routing> routingList = routingRepository.findByOrderItem(orderItem);
+//
+//        List<RoutingDto> routingDtoList = new ArrayList<>();
+//        for (Routing routing : routingList) {
+//            RoutingDto routingDto = RoutingDto.builder()
+//                    .processCode(routing.getProcessCode())
+//                    .processName(routing.getProcessName())
+//                    .processTime(routing.getProcessTime())
+//                    .remark(routing.getRemark())
+//                    .build();
+//            routingDtoList.add(routingDto);
+//        }
+//        // 3. WorkOrderDto 생성
+//        return WorkOrderDto.builder()
+//                .orderItem(orderItemDto)
+//                .routingList(routingDtoList)
+//                .build();
+//    }
 }

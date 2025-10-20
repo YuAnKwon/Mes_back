@@ -1,5 +1,6 @@
 package com.mes_back.service;
 
+import com.mes_back.constant.CompanyType;
 import com.mes_back.constant.Yn;
 import com.mes_back.dto.CompanyDto;
 import com.mes_back.dto.CompanyListDto;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,4 +78,23 @@ public class CompanyService {
         return CompanyDto.fromEntity(company);
     }
 
+    // 거래처 list 조회
+    public List<CompanyListDto> getClient() {
+        List<CompanyListDto> dtoList = new ArrayList<>();
+        List<Company> companyList = companyRepository.findByCompanyType(CompanyType.CLIENT);
+        for(Company company : companyList ){
+            dtoList.add(new CompanyListDto(company));
+        }
+        return dtoList;
+    }
+
+    // 거래처 list 조회
+    public List<CompanyListDto> getSupplier() {
+        List<CompanyListDto> dtoList = new ArrayList<>();
+        List<Company> companyList = companyRepository.findByCompanyType(CompanyType.SUPPLIER);
+        for(Company company : companyList ){
+            dtoList.add(new CompanyListDto(company));
+        }
+        return dtoList;
+    }
 }

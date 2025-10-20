@@ -3,6 +3,7 @@ package com.mes_back.controller;
 import com.mes_back.dto.OrderItemInOutDto;
 import com.mes_back.dto.ProcessStatusDto;
 import com.mes_back.dto.ShipInvoiceDto;
+import com.mes_back.dto.WorkOrderDto;
 import com.mes_back.entity.OrderItemInout;
 import com.mes_back.service.OrderItemInoutService;
 import lombok.RequiredArgsConstructor;
@@ -101,10 +102,18 @@ public class OrderItemInoutController {
         return ResponseEntity.ok(updatedId);
     }
 
+//    // 작업지시서
+//    @GetMapping("/orderitem/workorder/{id}")
+//    public WorkOrderDto getWorkOrder(@PathVariable Long id){
+//        return orderItemInOutService.getWorkOrder(id);
+//    }
+
     // 출하증
     @GetMapping("/orderitem/ship/{id}")
     public ShipInvoiceDto getShipmentInvoice(@PathVariable Long id){
         return orderItemInOutService.getShipmentInvoice(id);
     }
+
+
 
 }

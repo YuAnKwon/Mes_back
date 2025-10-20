@@ -1,6 +1,7 @@
 package com.mes_back.repository;
 
 import com.mes_back.constant.Yn;
+import com.mes_back.entity.OrderItem;
 import com.mes_back.entity.Routing;
 import org.springframework.data.jpa.repository.JpaRepository;
 

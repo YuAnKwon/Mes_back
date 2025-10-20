@@ -34,6 +34,17 @@ public class CampanyController {
         return ResponseEntity.ok(companyService.findAll());
     }
 
+    @GetMapping("/list/client")
+    public ResponseEntity<List<CompanyListDto>> getClient() {
+        return ResponseEntity.ok(companyService.getClient());
+    }
+
+    @GetMapping("/list/supplier")
+    public ResponseEntity<List<CompanyListDto>> getSupplier() {
+        return ResponseEntity.ok(companyService.getSupplier());
+    }
+
+
     //업체 거래 상태 변경
     @PatchMapping("/{id}/state")
     public ResponseEntity<Company> updateBusinessYn( @PathVariable Long id, @RequestBody CompanyStateDto companyStateDto ) {
@@ -51,7 +62,7 @@ public class CampanyController {
 
 
     //업체 수정
-    @PatchMapping("/detail/{id}")
+    @PutMapping("/detail/{id}")
     public ResponseEntity<String> updateDetail(
             @PathVariable Long id,
             @RequestBody CompanyDto dto
