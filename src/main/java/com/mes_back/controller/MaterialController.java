@@ -52,7 +52,7 @@ public class MaterialController {
 
 
     //업체 수정
-    @PatchMapping("/detail/{id}")
+    @PutMapping("/detail/{id}")
     public ResponseEntity<String> updateDetail(
             @PathVariable Long id,
             @RequestBody MaterialDto dto

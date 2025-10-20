@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -28,9 +29,19 @@ public class OrderItemDto {
     private String color; // 색상
     private String remark; // 비고
 
-    private List<MultipartFile> imgUrl;
+    private List<OrderItemImgDto> images;
 
+
+    // 엔티티를 클라이언트 전송용 DTO로 변환하는 정적 팩토리 메서드.
     public static OrderItemDto fromEntity(OrderItem orderItem) {
+
+        //연관된 이미지 엔티티들을 DTO 리스트로 변환.
+        List<OrderItemImgDto> images = orderItem.getImages().stream()
+                .map(OrderItemImgDto::fromEntity)
+                .collect(Collectors.toList());
+
+
+        //Entity => Dto 매핑
         return OrderItemDto.builder()
                 .id(orderItem.getId())
                 .company(orderItem.getCompany().getCompanyName())
@@ -41,6 +52,7 @@ public class OrderItemDto {
                 .unitPrice(orderItem.getUnitPrice())
                 .color(orderItem.getColor())
                 .remark(orderItem.getRemark())
+                .images(images) // 👈 여기 포함
                 .build();
     }
 

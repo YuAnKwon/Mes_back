@@ -34,7 +34,7 @@ public class OrderItemService {
     private final OrderItemImgService orderItemImgService; // 👈 주입
 
     //register and update
-    //업체 등록(Dto에서 받은 값을 새로 생성한 OrderItem(엔티티) 객체에 넣기 ==> DB에 저장)
+    //수주품목대상 등록(Dto에서 받은 값을 새로 생성한 OrderItem(엔티티) 객체에 넣기 ==> DB에 저장)
     @Transactional
     public OrderItem saveOrderItem(Long id, OrderItemDto dto, List<MultipartFile> imgFiles) {
         OrderItem orderItem;
@@ -44,6 +44,7 @@ public class OrderItemService {
             orderItem = new OrderItem();
         } else {
             // 수정
+            //DB에서 기존 엔티티 조회
             orderItem = orderItemRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("해당 업체가 존재하지 않습니다."));
         }
@@ -51,6 +52,7 @@ public class OrderItemService {
         System.out.println("입력된 회사명: " + dto.getCompany());
 
         // String → Company 엔티티 변환
+        //DTO에 담긴 회사명으로 Company 엔티티를 찾아 연관관계 설정(외래키 매핑).
         Company company = companyRepository.findByCompanyName(dto.getCompany())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회사입니다."));
 
@@ -65,11 +67,14 @@ public class OrderItemService {
         orderItem.setColor(dto.getColor());
         orderItem.setRemark(dto.getRemark());
 
+        //엔티티를 DB에 저장
         OrderItem savedOrderItem = orderItemRepository.save(orderItem);
 
         // 👈 이미지 저장 서비스 호출
+        //저장된 엔티티와 파일 리스트를 이미지 저장 서비스로 위임(파일 저장 및 이미지 메타 DB 기록).
         orderItemImgService.saveImages(savedOrderItem, imgFiles);
 
+        //저장된 엔티티 반환.
         return savedOrderItem;
     }
 
