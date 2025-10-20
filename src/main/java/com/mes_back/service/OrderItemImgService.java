@@ -1,14 +1,17 @@
 package com.mes_back.service;
 
 import com.mes_back.constant.Yn;
+import com.mes_back.entity.Company;
 import com.mes_back.entity.OrderItem;
 import com.mes_back.entity.OrderItemImg;
 import com.mes_back.repository.OrderItemImgRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -56,6 +59,49 @@ public class OrderItemImgService {
 
             OrderItemImgRepository.save(img);
         }
+    }
+
+    // 파일 삭제 메서드
+    public void deleteImage(String ImgUrl) {
+        try {
+            // filePath가 null이 아니고 비어 있지 않으면 실행
+            if (ImgUrl != null && !ImgUrl.isEmpty()) {
+                File file = new File(ImgUrl);
+
+                // 파일이 존재할 경우 삭제
+                if (file.exists()) {
+                    boolean deleted = file.delete();
+
+                    if (deleted) {
+                        System.out.println("파일 삭제 성공: " + ImgUrl);
+                    } else {
+                        System.out.println("파일 삭제 실패: " + ImgUrl);
+                    }
+                } else {
+                    System.out.println("파일이 존재하지 않습니다: " + ImgUrl);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("파일 삭제 중 오류 발생: " + e.getMessage());
+        }
+    }
+
+    // 대표 이미지 변경
+    @Transactional
+    public void updateRepYn(Long orderItemId, Long newRepImageId) {
+        // 1️⃣ 기존 대표 이미지가 있으면 N으로 변경
+        OrderItemImg currentRep = OrderItemImgRepository.findByOrderItemIdAndRepYn(orderItemId, "Y")
+                .orElse(null);
+        if (currentRep != null) {
+            currentRep.setRepYn(Yn.N);
+            OrderItemImgRepository.save(currentRep);
+        }
+
+        // 2️⃣ 새 대표 이미지 설정
+        OrderItemImg newRep = OrderItemImgRepository.findById(newRepImageId)
+                .orElseThrow(() -> new IllegalArgumentException("이미지가 존재하지 않습니다."));
+        newRep.setRepYn(Yn.Y);
+        OrderItemImgRepository.save(newRep);
     }
 
 }

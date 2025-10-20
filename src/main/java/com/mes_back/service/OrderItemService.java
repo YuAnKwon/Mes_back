@@ -13,10 +13,16 @@ import com.mes_back.entity.Material;
 import com.mes_back.entity.OrderItem;
 import com.mes_back.entity.OrderItemImg;
 import com.mes_back.repository.CompanyRepository;
+import com.mes_back.repository.OrderItemImgRepository;
 import com.mes_back.repository.OrderItemRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -32,6 +38,7 @@ public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
     private final CompanyRepository companyRepository;
     private final OrderItemImgService orderItemImgService; // 👈 주입
+    private final OrderItemImgRepository orderItemImgRepository;
 
     //register and update
     //수주품목대상 등록(Dto에서 받은 값을 새로 생성한 OrderItem(엔티티) 객체에 넣기 ==> DB에 저장)
@@ -104,6 +111,21 @@ public class OrderItemService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 업체가 존재하지 않습니다."));
         return OrderItemDto.fromEntity(orderItem);
     }
+
+    //이미지 삭제
+    // OrderItemService.java
+    @Transactional
+    public void deleteOrderItemImage(Long imageId) {
+        OrderItemImg image = orderItemImgRepository.findById(imageId)
+                .orElseThrow(() -> new EntityNotFoundException("이미지를 찾을 수 없습니다."));
+
+        // 실제 파일도 삭제 (FileService 사용 중이라면)
+        orderItemImgService.deleteImage(image.getImgUrl());
+
+        orderItemImgRepository.delete(image);
+    }
+
+
 
 
 }

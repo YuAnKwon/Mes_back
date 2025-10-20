@@ -5,8 +5,10 @@ import com.mes_back.dto.*;
 import com.mes_back.entity.Material;
 import com.mes_back.entity.OrderItem;
 import com.mes_back.service.MaterialService;
+import com.mes_back.service.OrderItemImgService;
 import com.mes_back.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +21,7 @@ import java.util.List;
 public class OrderItemController {
 
     final OrderItemService orderItemService;
+    final OrderItemImgService orderItemImgService;
 
 
     //입력된 데이터를 OrderItemDto 객체로 매핑, Service에 있는 등록 로직으로 등록처리(Dto -> Entity -> DB), 등록된 업체 정보를 응답으로 반환
@@ -76,4 +79,24 @@ public class OrderItemController {
     }
 
 
+    //이미지 삭제
+    @DeleteMapping("/detail/image/{id}")
+    public ResponseEntity<String> deleteImage(@PathVariable Long imageId) {
+        orderItemService.deleteOrderItemImage(imageId);
+        return ResponseEntity.ok("이미지 삭제 완료");
+    }
+
+
+    // 대표 이미지 변경
+    @PatchMapping("/{orderItemId}/repimage/{imageId}")
+    public ResponseEntity<?> updateRepImage(@PathVariable Long orderItemId,
+                                            @PathVariable Long imageId) {
+        try {
+            orderItemImgService.updateRepYn(orderItemId, imageId);
+            return ResponseEntity.ok("대표 이미지 변경 완료");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("대표 이미지 변경 실패: " + e.getMessage());
+        }
+    }
 }
