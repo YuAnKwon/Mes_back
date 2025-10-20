@@ -49,8 +49,6 @@ public class OrderItemService {
                     .orElseThrow(() -> new IllegalArgumentException("해당 업체가 존재하지 않습니다."));
         }
 
-        System.out.println("입력된 회사명: " + dto.getCompany());
-
         // String → Company 엔티티 변환
         //DTO에 담긴 회사명으로 Company 엔티티를 찾아 연관관계 설정(외래키 매핑).
         Company company = companyRepository.findByCompanyName(dto.getCompany())
