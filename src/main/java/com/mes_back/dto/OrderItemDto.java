@@ -31,6 +31,8 @@ public class OrderItemDto {
 
     private List<OrderItemImgDto> images;
 
+    private List<OrderItemRoutingDto> routing;
+
 
     // 엔티티를 클라이언트 전송용 DTO로 변환하는 정적 팩토리 메서드.
     public static OrderItemDto fromEntity(OrderItem orderItem) {
@@ -52,7 +54,7 @@ public class OrderItemDto {
                 .unitPrice(orderItem.getUnitPrice())
                 .color(orderItem.getColor())
                 .remark(orderItem.getRemark())
-                .images(images) // 👈 여기 포함
+                .images(images)
                 .build();
     }
 
