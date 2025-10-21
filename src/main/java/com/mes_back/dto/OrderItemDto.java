@@ -42,6 +42,12 @@ public class OrderItemDto {
                 .map(OrderItemImgDto::fromEntity)
                 .collect(Collectors.toList());
 
+        // 추가
+        List<OrderItemRoutingDto> routing = orderItem.getOrderItemRoutings().stream()
+                .map(OrderItemRoutingDto::fromEntity)
+                .sorted((r1, r2) -> r1.getRoutingOrder().compareTo(r2.getRoutingOrder()))
+                .collect(Collectors.toList());
+
 
         //Entity => Dto 매핑
         return OrderItemDto.builder()
@@ -55,6 +61,7 @@ public class OrderItemDto {
                 .color(orderItem.getColor())
                 .remark(orderItem.getRemark())
                 .images(images)
+                .routing(routing)  // 추가
                 .build();
     }
 

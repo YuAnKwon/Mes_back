@@ -1,6 +1,7 @@
 package com.mes_back.dto;
 
 
+import com.mes_back.entity.OrderItemRouting;
 import lombok.*;
 
 @Getter
@@ -12,4 +13,11 @@ import lombok.*;
 public class OrderItemRoutingDto {
     private Long routingId; // Routing PK
     private Integer routingOrder;
+
+    public static OrderItemRoutingDto fromEntity(OrderItemRouting entity) {
+        return OrderItemRoutingDto.builder()
+                .routingId(entity.getRouting().getId())
+                .routingOrder(entity.getRoutingOrder())
+                .build();
+    }
 }

@@ -14,9 +14,9 @@ import lombok.*;
 @ToString
 public class MaterialListDto {
     private Long id;
-    private String name; // 품목명
-    private String code; // 품목번호
-    private String company; // 매입처명
+    private String materialName; // 품목명
+    private String materialCode; // 품목번호
+    private String companyName; // 매입처명
     private String type;  // 분류 (ENUM)
     private String color;  // 색상
     private String useYn = "Y";  // 사용여부 (Y/N)
@@ -25,9 +25,9 @@ public class MaterialListDto {
     //DB에서 가져온 값을 Dto에 복사
     public MaterialListDto(Material material) {
         this.id =  material.getId();
-        this.name = material.getName();
-        this.code = material.getCode();
-        this.company = material.getCompany().getCompanyName();
+        this.materialName = material.getName();
+        this.materialCode = material.getCode();
+        this.companyName = material.getCompany().getCompanyName();
         this.type =  EnumKoreanMapper.getMaterialTypeKorean(material.getType().name());
         this.color = material.getColor();
         this.useYn = EnumKoreanMapper.getBusinessYnKorean(material.getUseYn().name());

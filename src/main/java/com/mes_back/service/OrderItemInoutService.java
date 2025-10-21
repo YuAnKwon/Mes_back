@@ -321,32 +321,37 @@ public class OrderItemInoutService {
         return orderItemInRouting.getId();
     }
 
-//    public WorkOrderDto getWorkOrder(Long id) {
-//        // 입출고
-//        OrderItemInout orderItemInout = orderItemInoutRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("OrderItemInout Entity not found"));
-//
-//        // 수주품목
-//        OrderItem orderItem = orderItemInout.getOrderItem();
-//        OrderItemDto orderItemDto = OrderItemDto.fromEntity(orderItem);
-//
-//        // 2. Routing 리스트 조회
-//        List<Routing> routingList = routingRepository.findByOrderItem(orderItem);
-//
-//        List<RoutingDto> routingDtoList = new ArrayList<>();
-//        for (Routing routing : routingList) {
-//            RoutingDto routingDto = RoutingDto.builder()
-//                    .processCode(routing.getProcessCode())
-//                    .processName(routing.getProcessName())
-//                    .processTime(routing.getProcessTime())
-//                    .remark(routing.getRemark())
-//                    .build();
-//            routingDtoList.add(routingDto);
-//        }
-//        // 3. WorkOrderDto 생성
-//        return WorkOrderDto.builder()
-//                .orderItem(orderItemDto)
-//                .routingList(routingDtoList)
-//                .build();
-//    }
+
+    public WorkOrderDto getWorkOrder(Long id) {
+        // id로 입출고 엔티티 찾기
+        OrderItemInout orderItemInout = orderItemInoutRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("OrderItemInout Entity not found"));
+
+        // 수주품목 가져오기
+        OrderItem orderItem = orderItemInout.getOrderItem();
+        // 이미지랑 라우팅순서까지 담음.
+        OrderItemDto orderItemDto = OrderItemDto.fromEntity(orderItem);
+
+        // OrderItemRouting 가져오기
+        List<OrderItemRouting> orderItemRoutings = orderItem.getOrderItemRoutings();
+
+        List<RoutingDto> routingDtoList = new ArrayList<>();
+        for (OrderItemRouting oir : orderItemRoutings) {
+            Routing routing = oir.getRouting();
+            RoutingDto dto = RoutingDto.builder()
+                    .id(routing.getId())
+                    .processCode(routing.getProcessCode())
+                    .processName(routing.getProcessName())
+                    .processTime(routing.getProcessTime())
+                    .remark(routing.getRemark())
+                    .build();
+            routingDtoList.add(dto);
+        }
+        System.out.println(orderItemDto);
+        // 3. WorkOrderDto 생성
+        return WorkOrderDto.builder()
+                .orderItem(orderItemDto)
+                .routingList(routingDtoList)
+                .build();
+    }
 }

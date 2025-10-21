@@ -15,4 +15,5 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     List<OrderItem> findByUseYn(Yn Yn);
     List<OrderItem> findByCompany_BusinessYn(Yn businessYn);
 
+    boolean existsByItemCode(String itemCode);
 }

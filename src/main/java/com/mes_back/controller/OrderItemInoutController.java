@@ -102,11 +102,11 @@ public class OrderItemInoutController {
         return ResponseEntity.ok(updatedId);
     }
 
-//    // 작업지시서
-//    @GetMapping("/orderitem/workorder/{id}")
-//    public WorkOrderDto getWorkOrder(@PathVariable Long id){
-//        return orderItemInOutService.getWorkOrder(id);
-//    }
+    // 작업지시서
+    @GetMapping("/orderitem/workorder/{id}")
+    public WorkOrderDto getWorkOrder(@PathVariable Long id){
+        return orderItemInOutService.getWorkOrder(id);
+    }
 
     // 출하증
     @GetMapping("/orderitem/ship/{id}")

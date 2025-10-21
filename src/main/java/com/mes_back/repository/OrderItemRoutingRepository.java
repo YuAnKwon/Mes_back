@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface OrderItemRoutingRepository extends JpaRepository<OrderItemRouting, Long> {
     List<OrderItemRouting> findByOrderItem(OrderItem orderItem);
+
+    void deleteAllByOrderItemId(Long id);
 }

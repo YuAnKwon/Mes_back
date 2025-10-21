@@ -50,6 +50,9 @@ public class OrderItemService {
         if (id == null) {
             // 신규 등록
             orderItem = new OrderItem();
+            if(orderItemRepository.existsByItemCode(dto.getItemCode())){
+                throw new IllegalArgumentException("이미 존재하는 품목번호입니다.");
+            }
         } else {
             // 수정
             //DB에서 기존 엔티티 조회
@@ -80,8 +83,13 @@ public class OrderItemService {
         //저장된 엔티티와 파일 리스트를 이미지 저장 서비스로 위임(파일 저장 및 이미지 메타 DB 기록).
         orderItemImgService.saveImages(savedOrderItem, imgFiles);
 
-        // ✅ 공정 저장
+        // 공정 저장
         if (dto.getRouting() != null) {
+            // 수정일 때만 기존 관계 삭제
+            if (id != null) {
+                orderItemRoutingRepository.deleteAllByOrderItemId(savedOrderItem.getId());
+            }
+
             List<OrderItemRouting> routingList = dto.getRouting().stream()
                     .map(rDto -> {
                         Routing routing = routingRepository.findById(rDto.getRoutingId())
@@ -93,8 +101,7 @@ public class OrderItemService {
                                 .build();
                     })
                     .toList();
-            savedOrderItem.getOrderItemRoutings().clear();
-            savedOrderItem.getOrderItemRoutings().addAll(routingList);
+
             orderItemRoutingRepository.saveAll(routingList);
         }
 
