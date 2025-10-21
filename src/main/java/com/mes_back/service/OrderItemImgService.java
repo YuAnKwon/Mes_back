@@ -57,7 +57,7 @@ public class OrderItemImgService {
         for (OrderItemImgDto dto : imageDtosSafe) {
             if (dto.getId() != null) {
                 OrderItemImg img = orderItemImgRepository.findById(dto.getId()).orElseThrow();
-                img.setRepYn(Yn.N); // 무조건 N으로 초기화
+                img.setRepYn(dto.getRepYn()); // 무조건 N으로 초기화
                 finalImgs.add(img);
             }
         }
