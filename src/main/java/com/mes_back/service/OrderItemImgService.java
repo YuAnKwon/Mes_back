@@ -58,6 +58,7 @@ public class OrderItemImgService {
             if (dto.getId() != null) {
                 OrderItemImg img = orderItemImgRepository.findById(dto.getId()).orElseThrow();
                 img.setRepYn(dto.getRepYn()); // 무조건 N으로 초기화
+                System.out.println("dto의 repYn이 들어가는지" + img.getRepYn());
                 finalImgs.add(img);
             }
         }
@@ -84,20 +85,32 @@ public class OrderItemImgService {
                 img.setImgFileName(savedName);
                 img.setImgUrl("/img/" + savedName);
                 img.setRepYn(Yn.N); // 새 이미지는 기본값 N
-
                 finalImgs.add(img);
+                System.out.println("======================");
+                System.out.println(img.getImgFileName());
+                System.out.println("새 이미지 repYn" + img.getRepYn());
             }
         }
 
         // 6️⃣ 전체 이미지 중 첫 번째 이미지를 Y로 강제 설정
-        if (!finalImgs.isEmpty()) {
+//        if (!finalImgs.isEmpty()) {
+//            finalImgs.get(0).setRepYn(Yn.Y);
+//            System.out.println("======================");
+//            System.out.println(finalImgs.get(0).getImgFileName());
+//            System.out.println("첫번째놈 Y로 강제설정" + finalImgs.get(0).getRepYn());
+//        }
+        boolean hasY = finalImgs.stream().anyMatch(img -> Yn.Y.equals(img.getRepYn()));
+        if (!hasY && !finalImgs.isEmpty()) {
+            // 없으면 새 이미지든 기존 이미지든 맨 앞 놈을 대표로
             finalImgs.get(0).setRepYn(Yn.Y);
         }
-
         // 7️⃣ 한 번에 DB 저장
         orderItemImgRepository.saveAll(finalImgs);
+        for (OrderItemImg img : finalImgs) {
+            System.out.println("======================");
+            System.out.println(img.getImgFileName());
+            System.out.println(img.getRepYn());
+        }
     }
-
-
 
 }
