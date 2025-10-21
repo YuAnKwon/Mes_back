@@ -14,6 +14,7 @@ import lombok.*;
 @ToString
 public class OrderItemImgDto {
 
+    private Long id;
     private OrderItem orderItem;
     private String imgOriName;
     private String imgFileName;
@@ -23,6 +24,7 @@ public class OrderItemImgDto {
     // 엔티티 → DTO 변환
     public static OrderItemImgDto fromEntity(OrderItemImg img) {
         OrderItemImgDto dto = new OrderItemImgDto();
+        dto.setId(img.getId());
         dto.setImgOriName(img.getImgOriName());
         dto.setImgFileName(img.getImgFileName());
         dto.setImgUrl("/api" + img.getImgUrl());

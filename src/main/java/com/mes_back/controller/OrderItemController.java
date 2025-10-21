@@ -79,24 +79,4 @@ public class OrderItemController {
     }
 
 
-    //이미지 삭제
-    @DeleteMapping("/detail/image/{id}")
-    public ResponseEntity<String> deleteImage(@PathVariable Long imageId) {
-        orderItemService.deleteOrderItemImage(imageId);
-        return ResponseEntity.ok("이미지 삭제 완료");
-    }
-
-
-    // 대표 이미지 변경
-    @PatchMapping("/{orderItemId}/repimage/{imageId}")
-    public ResponseEntity<?> updateRepImage(@PathVariable Long orderItemId,
-                                            @PathVariable Long imageId) {
-        try {
-            orderItemImgService.updateRepYn(orderItemId, imageId);
-            return ResponseEntity.ok("대표 이미지 변경 완료");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("대표 이미지 변경 실패: " + e.getMessage());
-        }
-    }
 }
