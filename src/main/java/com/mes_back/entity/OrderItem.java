@@ -58,4 +58,8 @@ public class OrderItem extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemImg> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItemRouting> orderItemRoutings = new ArrayList<>();
+
 }
