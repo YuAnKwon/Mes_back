@@ -14,6 +14,7 @@ import lombok.*;
 @ToString
 public class OrderItemImgDto {
 
+    private Long id;
     private OrderItem orderItem;
     private String imgOriName;
     private String imgFileName;

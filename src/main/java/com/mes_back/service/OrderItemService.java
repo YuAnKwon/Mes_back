@@ -78,7 +78,8 @@ public class OrderItemService {
 
         // 이미지 저장 서비스 호출
         //저장된 엔티티와 파일 리스트를 이미지 저장 서비스로 위임(파일 저장 및 이미지 메타 DB 기록).
-        orderItemImgService.saveImages(savedOrderItem, imgFiles);
+        // 이미지 전체 처리
+        orderItemImgService.saveImages(savedOrderItem, dto.getImages(), imgFiles);
 
         // ✅ 공정 저장
         if (dto.getRouting() != null) {
@@ -130,21 +131,6 @@ public class OrderItemService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 업체가 존재하지 않습니다."));
         return OrderItemDto.fromEntity(orderItem);
     }
-
-    //이미지 삭제
-    // OrderItemService.java
-    @Transactional
-    public void deleteOrderItemImage(Long imageId) {
-        OrderItemImg image = orderItemImgRepository.findById(imageId)
-                .orElseThrow(() -> new EntityNotFoundException("이미지를 찾을 수 없습니다."));
-
-        // 실제 파일도 삭제 (FileService 사용 중이라면)
-        orderItemImgService.deleteImage(image.getImgUrl());
-
-        orderItemImgRepository.delete(image);
-    }
-
-
 
 
 }
