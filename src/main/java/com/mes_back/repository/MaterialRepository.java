@@ -12,11 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MaterialRepository extends JpaRepository<Material,Long> {
+public interface MaterialRepository extends JpaRepository<Material, Long> {
     Optional<Material> findByCode(String code);
 
     List<Material> findByUseYn(Yn useYn);
 
     List<Material> findByCompany_BusinessYn(Yn businessYn);
 
+    boolean existsByCode(String materialCode);
 }

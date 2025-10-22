@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,21 +21,24 @@ public class RoutingController {
     public List<RoutingDto> getRoutingList() {
         return routingService.getRoutingList();
     }
-    
+
     // 라우팅 추가
     @PostMapping("/routing/new")
-    public ResponseEntity<?> newRouting(@RequestBody List<RoutingDto> RoutingDto){
+    public ResponseEntity<?> newRouting(@RequestBody List<RoutingDto> routingDto){
         try {
-            routingService.newRouting(RoutingDto);
+            routingService.newRouting(routingDto);
             return ResponseEntity.ok("라우팅 등록 성공");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("등록 중 오류 발생");
+            return ResponseEntity.status(500).body(Map.of("message", "등록 중 오류 발생"));
         }
     }
 
+
     @DeleteMapping("/routing/{id}")
-    public ResponseEntity<?> deleteRouting(@PathVariable Long id){
+    public ResponseEntity<?> deleteRouting(@PathVariable Long id) {
         try {
             routingService.deleteRouting(id);
             return ResponseEntity.ok("라우팅 삭제 성공");
@@ -43,5 +47,5 @@ public class RoutingController {
             return ResponseEntity.status(500).body("삭제 중 오류 발생");
         }
     }
-    
+
 }

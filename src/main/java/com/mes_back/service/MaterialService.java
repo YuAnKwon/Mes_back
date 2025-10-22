@@ -6,6 +6,7 @@ import com.mes_back.dto.MaterialDto;
 import com.mes_back.dto.MaterialListDto;
 import com.mes_back.entity.Company;
 import com.mes_back.entity.Material;
+import com.mes_back.entity.OrderItem;
 import com.mes_back.repository.CompanyRepository;
 import com.mes_back.repository.MaterialRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,10 @@ public class MaterialService {
         if (id == null) {
             // 신규 등록
             material = new Material();
+
+            if(materialRepository.existsByCode(dto.getMaterialCode())){
+                throw new IllegalArgumentException("이미 존재하는 품목번호입니다.");
+            }
         } else {
             // 수정
             material = materialRepository.findById(id)

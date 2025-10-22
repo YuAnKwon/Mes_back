@@ -28,7 +28,7 @@ public class OrderItemInout extends BaseTimeEntity {
     @Column(nullable = false)
     private Integer inAmount;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String lotNum;
 
     @Column(nullable = false)
@@ -40,7 +40,6 @@ public class OrderItemInout extends BaseTimeEntity {
 
     private Integer outAmount;
 
-    @Column(unique = true)
     private String outNum;
 
     private Date outDate;
