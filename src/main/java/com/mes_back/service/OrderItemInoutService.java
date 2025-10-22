@@ -329,8 +329,10 @@ public class OrderItemInoutService {
 
         // 수주품목 가져오기
         OrderItem orderItem = orderItemInout.getOrderItem();
+
         // 이미지랑 라우팅순서까지 담음.
         OrderItemDto orderItemDto = OrderItemDto.fromEntity(orderItem);
+        System.out.println(orderItemDto);
 
         // OrderItemRouting 가져오기
         List<OrderItemRouting> orderItemRoutings = orderItem.getOrderItemRoutings();
