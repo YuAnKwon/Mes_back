@@ -30,7 +30,7 @@ public class CampanyController {
 
     //서비스 계층의 findAll() 메서드를 호출해 업체 목록 조회 CompanyListDto 리스트로 반환
     @GetMapping("/list")
-    public ResponseEntity<List<CompanyListDto>> getAll() {
+    public ResponseEntity<List<CompanyListDto>> getFindAll() {
         return ResponseEntity.ok(companyService.findAll());
     }
 

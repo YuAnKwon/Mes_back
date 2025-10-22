@@ -111,7 +111,7 @@ public class OrderItemService {
     }
 
     //수주 품목 대상 조회(Entity -> Dto)
-    public List<OrderItemListDto> findByCompany_BusinessYn(Yn businessYn) {
+    public List<OrderItemListDto> findByCompany_BusinessYn() {
         return orderItemRepository.findByCompany_BusinessYn(Yn.Y).stream()
                 .map(OrderItemListDto::new)
                 .collect(Collectors.toList());

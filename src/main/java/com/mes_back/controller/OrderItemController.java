@@ -44,7 +44,7 @@ public class OrderItemController {
     //서비스 계층의 findAll() 메서드를 호출해 업체 목록 조회 OrderItemListDto 리스트로 반환
     @GetMapping("/list")
     public ResponseEntity<List<OrderItemListDto>> getCompany_BusinessYnList() {
-        return ResponseEntity.ok(orderItemService.findByCompany_BusinessYn(Yn.Y));
+        return ResponseEntity.ok(orderItemService.findByCompany_BusinessYn());
     }
 
     //수주 거래 상태 변경

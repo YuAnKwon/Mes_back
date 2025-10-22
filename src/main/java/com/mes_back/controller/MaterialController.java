@@ -31,8 +31,8 @@ public class MaterialController {
 
     //서비스 계층의 findAll() 메서드를 호출해 업체 목록 조회 MaterialListDto 리스트로 반환
     @GetMapping("/list")
-    public ResponseEntity<List<MaterialListDto>> getAll() {
-        return ResponseEntity.ok(materialService.findAll());
+    public ResponseEntity<List<MaterialListDto>> getFindByCompany_BusinessYn() {
+        return ResponseEntity.ok(materialService.findByCompany_BusinessYn());
     }
 
     //원자재 거래 상태 변경

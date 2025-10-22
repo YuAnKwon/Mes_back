@@ -61,8 +61,8 @@ public class MaterialService {
 
 
     //원자재 조회(Entity -> Dto)
-    public List<MaterialListDto> findAll() {
-        return materialRepository.findAll().stream()
+    public List<MaterialListDto> findByCompany_BusinessYn() {
+        return materialRepository.findByCompany_BusinessYn(Yn.Y).stream()
                 .map(MaterialListDto::new)
                 .collect(Collectors.toList());
     }
