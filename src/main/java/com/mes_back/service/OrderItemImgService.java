@@ -28,9 +28,8 @@ public class OrderItemImgService {
     private String imgLocation;
     final OrderItemImgRepository orderItemImgRepository;
 
-
     // 이미지 저장 메서드
-    //이미지 파일들을 실제로 파일시스템에 저장하고 관련 메타(?)를 DB에 남김.
+    // 이미지 파일들을 실제로 파일시스템에 저장하고 관련 메타(?)를 DB에 남김.
     @Transactional
     public void saveImages(OrderItem orderItem, List<OrderItemImgDto> imageDtos, List<MultipartFile> imgFiles) {
 
@@ -54,7 +53,6 @@ public class OrderItemImgService {
 
         List<OrderItemImg> finalImgs = new ArrayList<>();
 
-
         // 5️⃣ 새로 업로드된 이미지 처리
         if (imgFiles != null && !imgFiles.isEmpty()) {
             for (MultipartFile file : imgFiles) {
@@ -62,7 +60,8 @@ public class OrderItemImgService {
                 String savedName = UUID.randomUUID() + "_" + oriName;
 
                 File dir = new File(imgLocation);
-                if (!dir.exists()) dir.mkdirs();
+                if (!dir.exists())
+                    dir.mkdirs();
 
                 File saveFile = new File(dir, savedName);
                 try {
@@ -78,12 +77,11 @@ public class OrderItemImgService {
                 img.setImgUrl("/img/" + savedName);
                 img.setRepYn(Yn.N); // 새 이미지는 기본값 N
                 finalImgs.add(img);
-                System.out.println("======================");
+                System.out.println("==================================================================");
                 System.out.println(img.getImgFileName());
                 System.out.println("새 이미지 repYn" + img.getRepYn());
             }
         }
-
 
         // 4️⃣ 기존 이미지 DTO에서 repYn는 무시하고 모두 N으로 초기화
         for (OrderItemImgDto dto : imageDtosSafe) {
@@ -96,21 +94,18 @@ public class OrderItemImgService {
         }
 
         // 6️⃣ 전체 이미지 중 첫 번째 이미지를 Y로 강제 설정
-//        if (!finalImgs.isEmpty()) {
-//            finalImgs.get(0).setRepYn(Yn.Y);
-//            System.out.println("======================");
-//            System.out.println(finalImgs.get(0).getImgFileName());
-//            System.out.println("첫번째놈 Y로 강제설정" + finalImgs.get(0).getRepYn());
-//        }
         boolean hasY = finalImgs.stream().anyMatch(img -> Yn.Y.equals(img.getRepYn()));
         if (!hasY && !finalImgs.isEmpty()) {
             // 없으면 새 이미지든 기존 이미지든 맨 앞 놈을 대표로
             finalImgs.get(0).setRepYn(Yn.Y);
+            System.out.println("==================================================================");
+            System.out.println(finalImgs.get(0).getRepYn());
+            System.out.println("==================================================================");
         }
         // 7️⃣ 한 번에 DB 저장
         orderItemImgRepository.saveAll(finalImgs);
         for (OrderItemImg img : finalImgs) {
-            System.out.println("======================");
+            System.out.println("==================================================================");
             System.out.println(img.getImgFileName());
             System.out.println(img.getRepYn());
         }
