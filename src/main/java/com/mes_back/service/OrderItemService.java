@@ -50,6 +50,7 @@ public class OrderItemService {
         if (id == null) {
             // 신규 등록
             orderItem = new OrderItem();
+
             if(orderItemRepository.existsByItemCode(dto.getItemCode())){
                 throw new IllegalArgumentException("이미 존재하는 품목번호입니다.");
             }

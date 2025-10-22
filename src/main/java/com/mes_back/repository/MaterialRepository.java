@@ -15,4 +15,6 @@ public interface MaterialRepository extends JpaRepository<Material,Long> {
     Optional<Material> findByCode(String code);
 
     List<Material> findByUseYn(Yn useYn);
+
+    boolean existsByCode(String materialCode);
 }

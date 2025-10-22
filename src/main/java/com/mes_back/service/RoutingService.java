@@ -37,7 +37,16 @@ public class RoutingService {
     }
 
     public void newRouting(List<RoutingDto> routingDto) {
+        // 공정코드 갖고오기
+
         for (int i = 0; i < routingDto.size(); i++) {
+            boolean exists = routingRepository.existsByProcessCodeAndDelYn(
+                    routingDto.get(i).getProcessCode(),
+                    Yn.N
+            );
+            if(exists){
+                throw new IllegalArgumentException("이미 존재하는 공정코드입니다.");
+            }
             Routing routing = Routing.builder()
                     .processCode(routingDto.get(i).getProcessCode())
                     .processName(routingDto.get(i).getProcessName())

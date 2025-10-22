@@ -31,7 +31,7 @@ public class MaterialIn extends BaseTimeEntity{
     @Column(name = "in_amount", nullable = false)
     private Integer inAmount;
 
-    @Column(name = "in_num", unique = true)
+    @Column(name = "in_num")
     private String inNum;
 
     @Column(name = "in_date", nullable = false, length = 0)

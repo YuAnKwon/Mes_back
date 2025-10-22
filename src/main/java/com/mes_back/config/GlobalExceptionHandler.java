@@ -16,4 +16,5 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
         return ResponseEntity.badRequest().body(body); // 400으로 반환
     }
+
 }

@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface RoutingRepository extends JpaRepository<Routing,Long> {
     List<Routing> findByDelYn(Yn yn);
+
+    boolean existsByProcessCodeAndDelYn(String processCode, Yn yn);
 }

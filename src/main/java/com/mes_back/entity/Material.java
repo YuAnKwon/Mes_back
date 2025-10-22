@@ -28,7 +28,7 @@ public class Material extends BaseTimeEntity{
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;  // 업체명 (FK)
 
-    @Column(name = "material_code", nullable = false, unique = true)//품목번호 유니크 추가
+    @Column(name = "material_code", nullable = false)//품목번호 유니크 추가
     private String code;  // 품목번호
 
     @Enumerated(EnumType.STRING)

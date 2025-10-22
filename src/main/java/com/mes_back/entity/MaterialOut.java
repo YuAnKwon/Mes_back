@@ -31,7 +31,7 @@ public class MaterialOut extends BaseTimeEntity{
     @Column(name = "out_amount", nullable = false)
     private Integer outAmount;
 
-    @Column(name = "out_num", unique = true)
+    @Column(name = "out_num")
     private String outNum;
 
     @Column(name = "out_date", nullable = false)
