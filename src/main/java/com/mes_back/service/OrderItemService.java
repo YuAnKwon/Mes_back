@@ -59,6 +59,10 @@ public class OrderItemService {
             //DB에서 기존 엔티티 조회
             orderItem = orderItemRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("해당 업체가 존재하지 않습니다."));
+            if(orderItemRepository.existsByItemCodeAndIdNot(dto.getItemCode(), id)){
+                throw new IllegalArgumentException("이미 존재하는 품목번호입니다.");
+            }
+
         }
 
         // String → Company 엔티티 변환
