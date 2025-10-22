@@ -52,16 +52,8 @@ public class OrderItemImgService {
             }
         }
 
-        // 4️⃣ 기존 이미지 DTO에서 repYn는 무시하고 모두 N으로 초기화
         List<OrderItemImg> finalImgs = new ArrayList<>();
-        for (OrderItemImgDto dto : imageDtosSafe) {
-            if (dto.getId() != null) {
-                OrderItemImg img = orderItemImgRepository.findById(dto.getId()).orElseThrow();
-                img.setRepYn(dto.getRepYn()); // 무조건 N으로 초기화
-                System.out.println("dto의 repYn이 들어가는지" + img.getRepYn());
-                finalImgs.add(img);
-            }
-        }
+
 
         // 5️⃣ 새로 업로드된 이미지 처리
         if (imgFiles != null && !imgFiles.isEmpty()) {
@@ -89,6 +81,17 @@ public class OrderItemImgService {
                 System.out.println("======================");
                 System.out.println(img.getImgFileName());
                 System.out.println("새 이미지 repYn" + img.getRepYn());
+            }
+        }
+
+
+        // 4️⃣ 기존 이미지 DTO에서 repYn는 무시하고 모두 N으로 초기화
+        for (OrderItemImgDto dto : imageDtosSafe) {
+            if (dto.getId() != null) {
+                OrderItemImg img = orderItemImgRepository.findById(dto.getId()).orElseThrow();
+                img.setRepYn(dto.getRepYn()); // 무조건 N으로 초기화
+                System.out.println("dto의 repYn이 들어가는지" + img.getRepYn());
+                finalImgs.add(img);
             }
         }
 

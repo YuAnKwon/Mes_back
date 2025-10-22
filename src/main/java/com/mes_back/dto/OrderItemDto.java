@@ -41,7 +41,8 @@ public class OrderItemDto {
         List<OrderItemImgDto> images = orderItem.getImages().stream()
                 .map(OrderItemImgDto::fromEntity)
                 .collect(Collectors.toList());
-
+        System.out.println("====================");
+        System.out.println(images);
         // 추가
         List<OrderItemRoutingDto> routing = orderItem.getOrderItemRoutings().stream()
                 .map(OrderItemRoutingDto::fromEntity)
