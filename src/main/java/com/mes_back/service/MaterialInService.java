@@ -80,7 +80,7 @@ public class MaterialInService {
                             .manufactureDate(in.getManufactureDate())
                             .delYn(in.getDelYn() != null ? in.getDelYn().name() : "N")
                             .stock(lotStock) // ✅ LOT별 재고량
-                            .totalStock(totalStock) // ✅ 전체 재고량
+                            .totalStock(in.getInAmount()*spec) // ✅ 전체 재고량
                             .build();
                 })
                 .filter(Objects::nonNull)
