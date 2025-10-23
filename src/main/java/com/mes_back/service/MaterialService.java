@@ -39,7 +39,10 @@ public class MaterialService {
         } else {
             // 수정
             material = materialRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 업체가 존재하지 않습니다."));
+                    .orElseThrow(() -> new IllegalArgumentException("해당 원자재가 존재하지 않습니다."));
+            if(materialRepository.existsByCodeAndIdNot(dto.getMaterialCode(),id)){
+                throw new IllegalArgumentException("이미 존재하는 품목번호입니다.");
+            }
         }
 
         System.out.println("입력된 회사명: " + dto.getCompanyName());

@@ -44,21 +44,21 @@ public class MaterialController {
 
     }
 
-    //업체 상세 조회
+    // 상세 조회
     @GetMapping("/detail/{id}")
     public ResponseEntity<MaterialDto> getDetail(@PathVariable Long id) {
         return ResponseEntity.ok(materialService.getMaterialDetail(id));
     }
 
 
-    //업체 수정
+    // 수정
     @PutMapping("/detail/{id}")
     public ResponseEntity<String> updateDetail(
             @PathVariable Long id,
             @RequestBody MaterialDto dto
     ) {
         materialService.saveMaterial(id, dto);
-        return ResponseEntity.ok("업체 정보 수정 완료");
+        return ResponseEntity.ok("원자재 정보 수정 완료");
     }
 
 }

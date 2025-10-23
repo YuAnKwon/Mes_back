@@ -20,4 +20,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     List<Material> findByCompany_BusinessYn(Yn businessYn);
 
     boolean existsByCode(String materialCode);
+
+    boolean existsByCodeAndIdNot(String materialCode, Long id);
 }
