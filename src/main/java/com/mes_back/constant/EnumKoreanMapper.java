@@ -23,7 +23,7 @@ public class EnumKoreanMapper {
     public static String getMaterialTypeKorean(String type) {
         switch (MaterialType.valueOf(type)) {
             case PAINT: return "페인트";
-            case THINNER: return "신너";
+            case THINNER: return "신나";
             case CLEANER: return "세정제";
             case HARDENER: return "경화제";
             default: return "기타";
